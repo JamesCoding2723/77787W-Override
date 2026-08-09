@@ -31,8 +31,6 @@ void initialize()
     pros::lcd::initialize(); // initialize brain screen
     imu.tare();     // calibrate sensors
     imu.set_data_rate(pros::E_MOTOR_ENCODER_DEGREES);
-    vertical_encoder.reset();
-    vertical_encoder.set_reversed(true);
     // print position to brain screen
 
     /*front_left_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
@@ -145,7 +143,7 @@ void opcontrol()
     middle_right_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     back_right_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-    const float Joystick_LowerDeadzone = 7;
+    const float Joystick_LowerDeadzone = 5;
 
     storing = false;
      bool mid_scoring = false;

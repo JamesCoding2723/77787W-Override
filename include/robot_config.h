@@ -26,8 +26,6 @@ extern pros::Motor front_right_motor;  // front right motor 15
 extern pros::Motor middle_right_motor; // middle right motor 17
 extern pros::Motor back_right_motor;   // back right motor 16
 
-extern pros::Rotation vertical_encoder;
-
 extern pros::Optical top_color_sensor;
 
 // left group
