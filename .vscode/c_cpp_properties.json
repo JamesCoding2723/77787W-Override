@@ -4,14 +4,15 @@
       "name": "PROS Project",
       "includePath": [
         "${workspaceFolder}/**",
-        "/Users/jameszhang/Documents/GitHub/77787W-Override/include"
+        "/Users/jameszhang/Documents/GitHub/77787W-Override/include",
+        "/Users/evanlu/Documents/GitHub/77787W-Override/include"
       ],
       "defines": [
         "_DEBUG",
         "UNICODE",
         "_UNICODE"
       ],
-      "compilerPath": "/Users/jameszhang/Library/Application Support/Code/User/globalStorage/sigbots.pros/install/pros-toolchain-macos/bin/arm-none-eabi-g++",
+      "compilerPath": "/Users/evanlu/Library/Application Support/Code/User/globalStorage/sigbots.pros/install/pros-toolchain-macos/bin/arm-none-eabi-g++",
       "cStandard": "gnu11",
       "cppStandard": "gnu++20",
       "intelliSenseMode": "gcc-arm",
@@ -20,7 +21,7 @@
       ],
       "browse": {
         "path": [
-          "/Users/jameszhang/Documents/GitHub/77787W-Override"
+          "/Users/evanlu/Documents/GitHub/77787W-Override"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""
