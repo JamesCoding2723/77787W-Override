@@ -80,42 +80,5 @@ void imu_display_task(void*);
 
 double getfrontwallpos(float wall_heading);
 
-void setjeminparallel(float _time, bool _active);
 
-void jeminloaderd();
 
-extern bool side;
-
-extern bool sort_on;
-
-extern bool Msort_on;
-
-extern bool is_sorting;
-
-void color_sort();
-
-void motor_sort();
-
-extern bool storing;
-
-void store();
-
-void midscore();
-
-extern bool score_on;
-
-void score();
-
-void skillscore();
-
-extern bool lowgoal_on;
-
-void lowscore();
-
-void auton_selector_task(void*);
-
-extern int auton_selection;
-
-extern const int max_autons;
-
-extern bool auton_locked;

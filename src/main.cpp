@@ -44,10 +44,6 @@ void initialize()
     pros::Task Intake(intake);
     pros::Task Intake2(intake2);
     pros::Task Walltask(imu_display_task);
-    pros::Task matchload(jeminloaderd);
-    pros::Task ColorSort(color_sort);
-    pros::Task Store(store);
-    pros::Task Score(score);
     pros::Task odomTask(odometry);
     //pros::Task mmidscore(midscore);
 
@@ -85,14 +81,12 @@ void autonomous()
 
     setintake2spd(0);
     setintakespd(0);
-    sort_on = false;
-    jeminwing.set_value(true);
 
     //auto_skills();
 
     // Right_3_4();
 
-    Left_3_4();
+    //Left_3_4();
 
     // right_7();
 
@@ -131,9 +125,7 @@ void opcontrol()
     setintakespd(0);
     setintake2spd(0);
 
-    sort_on = true;
-    Msort_on = false;
-    side = false; //false is red, true is blue
+   
     
 
 
@@ -146,10 +138,7 @@ void opcontrol()
 
     const float Joystick_LowerDeadzone = 5;
 
-    storing = false;
-     bool mid_scoring = false;
-     static bool antijam = false;
-
+   
     while (true)
     {
         
@@ -193,59 +182,31 @@ void opcontrol()
         }
 
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) && master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
-            side = !side;
         }
 
         if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)){
-            Msort_on = !Msort_on;
         } 
 
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && is_sorting == false)
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
         {
-            // setintakespd(-100);
-            // setintake2spd(-100);
-            sort_on = true;
-            score_on = true;
-            mid_scoring = false;
+
         }
-        else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) && is_sorting == false)
+        else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
         {
-            sort_on = false;
-            storing = true;
-            mid_scoring = false;
+
         }
-        else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) && is_sorting == false)
+        else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
         {
-            sort_on = false;
-            if (!antijam){
-                setintakespd(90);
-                setintake2spd(100);
-                pros::delay(50);
-                midscore();
-                antijam = true;
-            }
-            midscore();
-            //mid_scoring = false;
+
         }
 
         else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
         {
-            sort_on = false;
-            lowscore();
-            mid_scoring = false;
+
         }
         else 
         {
-            if (!is_sorting && !mid_scoring) {
-                setintakespd(0);
-                setintake2spd(0);
-                jeminmech.set_value(false);
-            }
-            sort_on = false;
-            storing = false;
-            antijam = false;
-            score_on = false;
-            lowgoal_on = false;
+
         }
 
         pros::c::delay(25);

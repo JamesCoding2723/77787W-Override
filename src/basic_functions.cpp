@@ -47,45 +47,14 @@ void intake()
 {
     while (true)
     {
-        if (intakespd1 == 0 && is_sorting == false)
-        {
-            rightintakem1.brake();  
-        } 
-        else 
-        {
-            rightintakem1.move((int)1.27 * intakespd1);
-        }
-        if (intakespd2 == 0 && is_sorting == false)
-        {
-            rightintakem2.brake();  
-        }
-        else
-        {
-            rightintakem2.move((int)1.27 * intakespd2);
-        }
+
     }
 }
 
 void intake2() {
     while (true)
     {
-        if (intake2spd == 0 && is_sorting == false)
-        {
-            leftintakem.brake();
-        }
-        else
-        {
 
-            if (jemintaketoggle == false) {
-                leftintakem.move((int)1.27 * intake2spd);
-            }
-
-            else{
-                leftintakem.move((int)1.27 * intake2spd);
-            }
-
-
-        }
     }
 }
 
