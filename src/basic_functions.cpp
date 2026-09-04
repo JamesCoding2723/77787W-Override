@@ -308,7 +308,7 @@ double getfrontwallpos(float wall_heading)
     }
 }
 
-float deg2rad(float _input)
+float deg2rad(float _input) // converts degrees to radians
 {
     return M_PI / 180 * _input;
 }
