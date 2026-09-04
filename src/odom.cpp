@@ -329,7 +329,6 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
 
         if (repeat > timeout * 50) {
 
-            stop();
             break;
         }
 
@@ -340,7 +339,6 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
 
         if (settleTime > _settle) {
 
-            stop();
             break;
         }
 
@@ -554,7 +552,6 @@ void moveToPose(
 
         if (repeat > timeout * 50) {
 
-            stop();
             break;
         }
 
@@ -565,7 +562,6 @@ void moveToPose(
 
         if (settleTime > _settle) {
 
-            stop();
             break;
         }
 
