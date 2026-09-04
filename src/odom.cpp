@@ -296,12 +296,10 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
         moveright(rightPower);
 
 
-        // ====================================================
         // Early jumpout
-        //
         // E_TOL = position error tolerance
         // D_TOL = speed/error-change tolerance
-        // ====================================================
+     
 
         double driveSpeed =
             fabs(driveError - drivePrevError);
