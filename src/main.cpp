@@ -48,6 +48,7 @@ void initialize()
     pros::Task ColorSort(color_sort);
     pros::Task Store(store);
     pros::Task Score(score);
+    pros::Task odomTask(odometry);
     //pros::Task mmidscore(midscore);
 
     //pros::Task Lowgoal(lowscore);

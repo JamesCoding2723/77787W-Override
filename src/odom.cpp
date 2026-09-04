@@ -1,52 +1,144 @@
+#include "pros/motors.h"
+#include "pros/rtos.h"
+#include "pros/screen.h"
 #include <cmath>
 #include <iostream>
-#include "pros/screen.h"
+#include <algorithm>
 #include "robot_config.h"
 #include "basic_functions.h"
-#include "PID.h"
+#include "odom.h"
 
-constexpr double start_heading = 90;
+// Robot position
+double posX = 0;
+double posY = 0;
+double posHeading = 0;
 
-double x = 0;
-double y = 0;
+// Previous sensor values
+double lastVertical = 0;
+double lastHorizontal = 0;
+double lastHeading = 0;
 
-double GPStracking()  //do not use this
-{
-    int line_number = 1;
-    vertical_encoder.set_position(0);
+void odometry(void*) {
+
+    // Tracking wheel
+    const double wheelDiameter = 2.75;   //NEED TO AJDUST
+
+    // PROS Rotation gives centidegrees
+    const double degreesToInches =
+        (M_PI * wheelDiameter) / 36000.0;
+
+    // Tracking wheel offsets from robot center.  //NEED TO AJDUST
+    const double verticalOffset = 0.0;    
+    const double horizontalOffset = 0.0;
+
+    // Reset encoders
+    //verticalEncoder.set_position(0);     //NEED TO AJDUST PORT
+    //horizontalEncoder.set_position(0);      //NEED TO AJDUST PORT
+
+    lastVertical = 0;
+    lastHorizontal = 0;
+    lastHeading = imu.get_heading();      //NEED TO AJDUST PORT
+
+    posHeading = lastHeading;
+
+    while (true) {
+
+        // Get current sensor values
+        double currentVertical = 0;
+            //verticalEncoder.get_position() * degreesToInches;  NEED TO AJDUST PORT
+
+        double currentHorizontal = 0;
+            //horizontalEncoder.get_position() * degreesToInches; NEED TO AJDUST PORT
+
+        double currentHeading =
+            imu.get_heading();
 
 
-    double prevdisX = 0;
-    double prevdisY = 0;
+        // Calculate changes
+        double dVertical =
+            currentVertical - lastVertical;
 
-    while (true)
-    {
-        double heading = std::fmod(360 - imu.get_heading() + start_heading, 360);
-        double dis_travY = vertical_encoder.get_position() * 0.0002399827721;
-        // double dis_travX = horizontal_encoder.get_position() * 0.0002399827721;
-        double deltaposY = dis_travY - prevdisY;
-        // double deltaposX = dis_travX - prevdisX;
+        double dHorizontal =
+            currentHorizontal - lastHorizontal;
 
-        // x += deltaposX * std::cos(heading * (M_PI / 180)) - deltaposY * std::sin(heading * (M_PI / 180));
-        // y += deltaposX * std::sin(heading * (M_PI / 180)) + deltaposY * std::cos(heading * (M_PI / 180));
+        double dHeading =
+            currentHeading - lastHeading;
 
-        x += deltaposY * std::cos(heading * (M_PI / 180));
-        y += deltaposY * std::sin(heading * (M_PI / 180));
 
-        return x;
-        return y;
+        // Handle heading wraparound
+        if (dHeading > 180)
+            dHeading -= 360;
 
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, line_number++, "Xerror: %f, %f", x, y);
-        //std::cout << x << " " << y << std::endl;
-        pros::delay(10);
+        if (dHeading < -180)
+            dHeading += 360;
+
+
+        // Convert heading change to radians
+        double dTheta =
+            dHeading * M_PI / 180.0;
+
+
+        // Remove movement caused by robot rotation
+        double localY =
+            dVertical - verticalOffset * dTheta;
+
+        double localX =
+            dHorizontal - horizontalOffset * dTheta;
+
+
+        // Arc calculation
+        double deltaX;
+        double deltaY;
+
+        if (fabs(dTheta) < 1e-5) {
+
+            // Straight movement
+            deltaX = localX;
+            deltaY = localY;
+
+        } 
+        else {
+
+            // Arc movement
+            double sinTerm =
+                sin(dTheta / 2.0);
+
+            double scale =
+                2.0 * sinTerm / dTheta;
+
+            deltaX =
+                scale * localX;
+
+            deltaY =
+                scale * localY;
+        }
+
+
+        // Convert robot-relative movement
+        // into field-relative movement
+        double theta =
+            lastHeading * M_PI / 180.0;
+
+        double globalX =
+            deltaX * cos(theta) +
+            deltaY * sin(theta);
+
+        double globalY =
+            deltaY * cos(theta) -
+            deltaX * sin(theta);
+
+
+        // Update position
+        posX += globalX;
+        posY += globalY;
+
+        posHeading = currentHeading;
+
+
+        lastVertical = currentVertical;
+        lastHorizontal = currentHorizontal;
+        lastHeading = currentHeading;
+
+        pros::delay(5);
     }
-}
-
-void GPSmove(float desx, float desy, int timeout)
-{
-    float movedis = std::sqrt((std::pow((desx - x), 2.0)) + (std::pow((desy - y), 2.0)));
-    float turndis = rad2deg(std::atan((desy - y) / (desx - x)));
-
-    //pidTurnRel(turndis, 1, 2000);
-    //pidMoveold(movedis, 1, 200);
 }

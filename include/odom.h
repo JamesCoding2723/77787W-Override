@@ -1,21 +1,11 @@
 
-extern double start_heading;
+#pragma once
 
-extern double x;
+// Global robot position
+extern double posX;
+extern double posY;
+extern double posHeading;
 
-extern double y;
-
-extern float lastForwardPos;
-extern float lastHeading;
-extern float lastPitch;
-extern float currForwardPos, currHeading;
-
-void GPStracking();
-
-double getX();
-double getY();
-
-void setX(double);
-void setY(double);
-
-void GPSmove(float, float);
+// Odometry task function
+void odometry(void* param);
+void odometry(void*);

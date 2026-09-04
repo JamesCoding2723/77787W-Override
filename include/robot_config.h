@@ -43,21 +43,3 @@ extern pros::Distance distance_sensor;
 extern pros::Distance frontdistance;
 extern pros::Distance middistance;
 
-/*pros::Rotation horizontal_encoder(20);
-// vertical tracking wheel encoder
-pros::ADIEncoder vertical_encoder('C', 'D', true);
-// horizontal tracking wheel
-lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_275, -5.75);
-// vertical tracking wheel*/
-// lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_275, -2.5);
-
-// odometry settings
-extern lemlib::OdomSensors sensors;
-
-// lateral PID controller
-//extern lemlib::ControllerSettings lateral_controller;
-
-// angular PID controller
-//extern lemlib::ControllerSettings angular_controller;
-
-extern lemlib::Chassis chassis;

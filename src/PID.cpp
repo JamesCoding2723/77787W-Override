@@ -6,6 +6,9 @@
 #include <algorithm>
 #include "robot_config.h"
 #include "basic_functions.h"
+#include "odom.h"
+
+
 
 float InchToEncoderunit(float distance)
 {

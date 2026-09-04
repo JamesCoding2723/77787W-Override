@@ -7,6 +7,7 @@
 #include "robot_config.h"
 #include "basic_functions.h"
 #include "pros/screen.h"
+#include "odom.h"
 
 int sign(float _input)
 {
@@ -148,7 +149,7 @@ void resetmotorpos(){
     back_right_motor.set_zero_position(0);
 }
 
-void moveDis(float spd, float dis)
+/*void moveDis(float spd, float dis)
 {
     if (fabs(spd) > 100)
         spd = sign(spd) * 100;
@@ -157,7 +158,7 @@ void moveDis(float spd, float dis)
         move(sign(spd) * spd);
     }
     stop();
-}
+}*/
 
 void moveForSec(float spd, bool dir, float secs)
 {
@@ -320,216 +321,8 @@ float rad2deg(float _input)
 
 void imu_display_task(void*) {
   while (true) {
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f, %f", wallpos, frontwallpos, imu.get_heading());
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 2, "color sort: %f, %f, %f", top_color_sensor.get_rgb().red, top_color_sensor.get_rgb().green, top_color_sensor.get_rgb().blue);
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "scoring val: %d, %i", middistance.get(), top_color_sensor.get_proximity());
-        if(side) pros::c::screen_print(pros::E_TEXT_LARGE, 4, "COLOR SORT: BLUE OUT");
-        else if(!side) pros::c::screen_print(pros::E_TEXT_LARGE, 4, "COLOR SORT: RED OUT  ");
-        if(Msort_on) pros::c::screen_print(pros::E_TEXT_MEDIUM, 6, "COLOR SORT: ON  ");
-        else if(!Msort_on) pros::c::screen_print(pros::E_TEXT_MEDIUM, 6, "COLOR SORT: OFF");
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "X: %.2f, Y: %.2f, H: %.2f", posX, posY, posHeading);
     pros::delay(100);   // update ~10 times per second
   }
-}
-
-bool side = false; //false = red out; true = blue out
-bool sort_on = false;
-bool is_sorting = false;
-bool lastsort = false;
-bool Msort_on = true;
-
-void color_sort() {
-    while (true) {
-        /*if (lastsort) {
-            lastsort = false;
-            pros::delay(5);
-            continue;
-        }*/
-        if (sort_on && Msort_on) {
-            pros::c::optical_rgb_s_t rgb = top_color_sensor.get_rgb();
-            if (!side && (rgb.red > 120 && rgb.red > rgb.green && rgb.red > rgb.blue)) {
-                jeminmech.set_value(true);
-                is_sorting = true;
-                setintakespddiff(-100, -100);
-                setintake2spd(100);
-                pros::delay(135); //165
-                /*setintakespddiff(intakespd1, intakespd2);
-                setintake2spd(intake2spd);*/
-                is_sorting = false;
-                lastsort = true;
-            } 
-            else if (side && (rgb.blue > 120 && rgb.blue > rgb.red && rgb.blue > rgb.green)) {
-                jeminmech.set_value(true);
-                is_sorting = true;
-                setintakespddiff(-100, -100);
-                setintake2spd(100); 
-                pros::delay(135); //165
-                /*setintakespddiff(intakespd1, intakespd2);
-                setintake2spd(intake2spd);*/
-                is_sorting = false;
-                lastsort = true;
-            }
-        }
-        pros::delay(1);
-    }
-}
-
-bool storing = true;
-bool prev = false;
-void store() {
-    while (true) {
-        if (storing && !prev) {
-            jeminmech.set_value(false);
-            setintakespd(-100);
-            setintake2spd(0);// hold block
-            prev = true;
-        } else {
-            // leftintakem.move_voltage(0);
-            if (!storing) prev = false;
-        }
-        pros::delay(20);
-    }
-}
-
-
-bool score_on = false;
-
-void score() {
-    static bool lastscore = false;
-    while(true) {
-        if (score_on && !is_sorting) {
-            storing = false;
-            jeminmech.set_value(true);
-
-            if (middistance.get() < 100) {
-                setintakespddiff(-100, 29);
-                setintake2spd(-100);
-            } else {
-                setintakespd(-100);
-                setintake2spd(-100);
-            }
-        }
-        pros::delay(10);
-    }
-}
-
-
-
-void midscore() {
-    int pocket;
-    storing = false;
-    jeminmech.set_value(true);
-
-    //skills
-    /*setintakespd(75);
-    setintake2spd(75);
-    pros::delay(200);
-    if (middistance.get() > 100) {
-        setintakespd(-50);
-        setintake2spd(35);
-    }
-    else{
-        setintake2spd(35);
-        pros::delay(250);
-        setintakespd(-35);
-    }//*/
-
-
-    // normal match
-    setintakespd(-100);
-    setintake2spd(50);
-    //*/
-}
-
-bool lastlowscore = false;
-bool lowgoal_on = false;
-
-void lowscore() {
-    storing = false;
-    jeminmech.set_value(true);
-    if (jemintaketoggle == false)
-    {
-        setintakespddiff(50, 80);
-        //pros::delay(300);              
-        setintake2spd(25);
-
-    }
-    else {
-        setintakespd(100);
-        setintake2spd(0);
-    }
-}
-
-void skillscore() {
-    storing = false;
-    setintakespd(20);
-    setintake2spd(-100);
-    moveForSec(50, false, 0.4);
-    setintakespd(-100);
-    setintake2spd(-100);
-}
-
-int auton_selection = 0;
-const int max_autons = 8;
-bool auton_locked = false;
-
-
-void auton_selector_task(void*) {
-
-    while (!auton_locked) {
-
-        master.clear();
-        master.set_text(0, 0, "Select Auton:");
-
-        switch (auton_selection) {
-            case 0:
-                master.set_text(1, 0, "right 4");
-                break;
-            case 1:
-                master.set_text(1, 0, "left 4");
-                break;
-            case 2:
-                master.set_text(1, 0, "right 3+4");
-                break;
-            case 3:
-                master.set_text(1, 0, "left 3+4");
-                break;
-            case 4:
-                master.set_text(1, 0, "right 7");
-                break;
-            case 5:
-                master.set_text(1, 0, "left 7");
-                break;
-            case 6:
-                master.set_text(1, 0, "SAWP");
-                break;
-            case 7:
-                master.set_text(1, 0, "1 inch");
-                break;
-            case 8:
-                master.set_text(1, 0, "skillllls");
-                break;
-        }
-
-        // Scroll left
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            auton_selection--;
-            if (auton_selection < 0)
-                auton_selection = max_autons - 1;
-        }
-
-        // Scroll right
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-            auton_selection++;
-            if (auton_selection >= max_autons)
-                auton_selection = 0;
-        }
-
-        // Lock selection
-        /*if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-            auton_locked = true;
-            master.rumble(".");
-        }*/
-
-        pros::delay(150);
-    }
 }
