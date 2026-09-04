@@ -104,11 +104,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/main.cpp.o",
-            "src/main.cpp"
+            "bin/basic_functions.cpp.o",
+            "src/basic_functions.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/main.cpp"
+        "file": "src/basic_functions.cpp"
     },
     {
         "arguments": [
@@ -141,10 +141,10 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/basic_functions.cpp.o",
-            "src/basic_functions.cpp"
+            "bin/main.cpp.o",
+            "src/main.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/basic_functions.cpp"
+        "file": "src/main.cpp"
     }
 ]
