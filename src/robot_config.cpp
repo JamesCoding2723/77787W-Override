@@ -26,12 +26,12 @@ pros::ADIDigitalOut jeminpark('F', false);
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Motor front_left_motor(-7, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
-pros::Motor middle_left_motor(-9, pros::E_MOTOR_GEAR_BLUE); // middle left motorv -12
-pros::Motor back_left_motor(10, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
-pros::Motor front_right_motor(4, pros::E_MOTOR_GEAR_BLUE); // front right motor 15
-pros::Motor middle_right_motor(3, pros::E_MOTOR_GEAR_BLUE); // middle right motor 17
-pros::Motor back_right_motor(-5, pros::E_MOTOR_GEAR_BLUE); // back right motor 16
+pros::Motor front_left_motor(9, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
+pros::Motor middle_left_motor(10, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
+pros::Motor back_left_motor(17, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
+pros::Motor front_right_motor(-13, pros::E_MOTOR_GEAR_BLUE); // front right motor 15
+pros::Motor middle_right_motor(-12, pros::E_MOTOR_GEAR_BLUE); // middle right motor 17
+pros::Motor back_right_motor(-11, pros::E_MOTOR_GEAR_BLUE); // back right motor 16
 
 
 pros::Optical top_color_sensor(14); 
@@ -53,17 +53,18 @@ lemlib::Drivetrain drivetrain(&left_motor_group,          // left group
 // lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_2, 0);
 // lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_2, 0.75);
 
-pros::Imu imu(20);
+pros::Imu imu(2);
 
 pros::Distance distance_sensor(19);
 pros::Distance frontdistance(11); // 1 is temporary
 pros::Distance middistance(18);
 
-/*pros::Rotation horizontal_encoder(20);
+pros::Rotation horizontalEncoder(3);
+pros::Rotation verticalEncoder(2);
 // vertical tracking wheel encoder
-pros::ADIEncoder vertical_encoder('C', 'D', true);
+//pros::ADIEncoder vertical_encoder('C', 'D', true);
 // horizontal tracking wheel
-lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_275, -5.75);
+//lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_275, -5.75);
 // vertical tracking wheel*/
 // lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_275, -2.5);
 

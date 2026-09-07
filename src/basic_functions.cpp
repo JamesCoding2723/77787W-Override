@@ -290,7 +290,7 @@ float rad2deg(float _input)
 
 void imu_display_task(void*) {
   while (true) {
-    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
+    //pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
     pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "X: %.2f, Y: %.2f, H: %.2f", posX, posY, posHeading);
     pros::delay(100);   // update ~10 times per second
   }

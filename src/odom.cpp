@@ -9,8 +9,8 @@
 #include "odom.h"
 
 // Robot position
-double posX = 0;
-double posY = 0;
+float posX = 0;
+float posY = 0;
 double posHeading = 0;
 
 // Previous sensor values
@@ -21,7 +21,7 @@ double lastHeading = 0;
 void odometry(void*) {
 
     // Tracking wheel
-    const double wheelDiameter = 2.75;   //NEED TO AJDUST
+    const double wheelDiameter = 2;   //NEED TO AJDUST
 
     // PROS Rotation gives centidegrees
     const double degreesToInches =
@@ -32,23 +32,21 @@ void odometry(void*) {
     const double horizontalOffset = 0.0;
 
     // Reset encoders
-    //verticalEncoder.set_position(0);     //NEED TO AJDUST PORT
-    //horizontalEncoder.set_position(0);      //NEED TO AJDUST PORT
+    verticalEncoder.set_position(0);     
+    horizontalEncoder.set_position(0);      
 
     lastVertical = 0;
     lastHorizontal = 0;
-    lastHeading = imu.get_heading();      //NEED TO AJDUST PORT
+    lastHeading = imu.get_heading();     
 
     posHeading = lastHeading;
 
     while (true) {
 
         // Get current sensor values
-        double currentVertical = 0;
-            //verticalEncoder.get_position() * degreesToInches;  NEED TO AJDUST PORT
+        double currentVertical = verticalEncoder.get_position() * degreesToInches;  
 
-        double currentHorizontal = 0;
-            //horizontalEncoder.get_position() * degreesToInches; NEED TO AJDUST PORT
+        double currentHorizontal = horizontalEncoder.get_position() * degreesToInches;
 
         double currentHeading =
             imu.get_heading();
@@ -139,7 +137,7 @@ void odometry(void*) {
         lastHorizontal = currentHorizontal;
         lastHeading = currentHeading;
 
-        pros::delay(5);
+        pros::delay(10);
     }
 }
 

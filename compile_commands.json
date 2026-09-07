@@ -215,11 +215,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/odom.cpp.o",
-            "src/odom.cpp"
+            "bin/main.cpp.o",
+            "src/main.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/odom.cpp"
+        "file": "src/main.cpp"
     },
     {
         "arguments": [
@@ -252,10 +252,10 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/main.cpp.o",
-            "src/main.cpp"
+            "bin/odom.cpp.o",
+            "src/odom.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/main.cpp"
+        "file": "src/odom.cpp"
     }
 ]

@@ -35,6 +35,9 @@ extern pros::MotorGroup right_motor_group;
 
 extern lemlib::Drivetrain drivetrain;
 
+extern pros::Rotation horizontalEncoder;
+extern pros::Rotation verticalEncoder;
+
 // lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_2, 0);
 // lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_2, 0.75);
 

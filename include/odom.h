@@ -2,8 +2,8 @@
 #pragma once
 
 // Global robot position
-extern double posX;
-extern double posY;
+extern float posX;
+extern float posY;
 extern double posHeading;
 
 // Odometry task function
