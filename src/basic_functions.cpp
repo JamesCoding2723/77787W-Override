@@ -291,7 +291,16 @@ float rad2deg(float _input)
 void imu_display_task(void*) {
   while (true) {
     //pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
-    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "X: %.2f, Y: %.2f, H: %.2f", posX, posY, posHeading);
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "X: %f, Y: %f, H: %f", posX, posY, posHeading);
+    /*pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %d, Horizontal: %d",localX, localY);
+    pros::c::screen_print(
+    pros::E_TEXT_MEDIUM,
+    4,
+    "dV: %.6f dH: %.6f",
+    dVertical,
+    dHorizontal
+);*/
     pros::delay(100);   // update ~10 times per second
   }
 }
+

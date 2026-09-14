@@ -6,9 +6,16 @@ extern float posX;
 extern float posY;
 extern double posHeading;
 
+
+extern double localX;
+extern double localY;
+
+extern double dVertical;
+extern double dHorizontal;
+
 // Odometry task function
 void odometry(void* param);
-void odometry(void*);
+//void odometry(void*);
 
 
 void moveToPoint(

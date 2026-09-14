@@ -42,13 +42,6 @@ pros::MotorGroup left_motor_group({front_left_motor, middle_left_motor, back_lef
 // right group
 pros::MotorGroup right_motor_group({front_right_motor, middle_right_motor, back_right_motor});
 
-lemlib::Drivetrain drivetrain(&left_motor_group,          // left group
-                              &right_motor_group,         // right group
-                              13,                         // track width
-                              lemlib::Omniwheel::OLD_325, // using old_2.75
-                              450,
-                              2 // horizontal drift is 2 (for now)
-);
 
 // lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_2, 0);
 // lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_2, 0.75);
@@ -60,7 +53,7 @@ pros::Distance frontdistance(11); // 1 is temporary
 pros::Distance middistance(18);
 
 pros::Rotation horizontalEncoder(3);
-pros::Rotation verticalEncoder(2);
+pros::Rotation verticalEncoder(4);
 // vertical tracking wheel encoder
 //pros::ADIEncoder vertical_encoder('C', 'D', true);
 // horizontal tracking wheel

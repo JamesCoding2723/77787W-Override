@@ -30,8 +30,12 @@ void initialize()
 
     pros::lcd::initialize(); // initialize brain screen
     imu.tare();     // calibrate sensors
-    imu.set_data_rate(pros::E_MOTOR_ENCODER_DEGREES);
+    imu.set_data_rate(5);
     // print position to brain screen
+
+    while (imu.is_calibrating()) {
+    pros::delay(10);
+    }
 
     /*front_left_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     middle_left_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);

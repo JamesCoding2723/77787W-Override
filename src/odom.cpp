@@ -8,7 +8,7 @@
 #include "basic_functions.h"
 #include "odom.h"
 
-// Robot position
+// Global position
 float posX = 0;
 float posY = 0;
 double posHeading = 0;
@@ -19,40 +19,37 @@ double lastHorizontal = 0;
 double lastHeading = 0;
 
 void odometry(void*) {
+    
 
-    // Tracking wheel
-    const double wheelDiameter = 2;   //NEED TO AJDUST
+    const double wheelDiameter = 2;
+    const double degreesToInches = (M_PI * wheelDiameter) / 360.0 / 100.0;
 
-    // PROS Rotation gives centidegrees
-    const double degreesToInches =
-        (M_PI * wheelDiameter) / 36000.0;
-
-    // Tracking wheel offsets from robot center.  //NEED TO AJDUST
-    const double verticalOffset = 0.0;    
+    const double verticalOffset = 0.0;
     const double horizontalOffset = 0.0;
 
-    // Reset encoders
-    verticalEncoder.set_position(0);     
-    horizontalEncoder.set_position(0);      
+    verticalEncoder.set_position(0);
+    horizontalEncoder.set_position(0);
 
     lastVertical = 0;
     lastHorizontal = 0;
-    lastHeading = imu.get_heading();     
+    lastHeading = imu.get_heading();
 
-    posHeading = lastHeading;
+    pros::delay(4000);
+
+    posX = 0;
+    posY = 0;
 
     while (true) {
 
-        // Get current sensor values
-        double currentVertical = verticalEncoder.get_position() * degreesToInches;  
+        double currentVertical =
+            verticalEncoder.get_position() * degreesToInches;
 
-        double currentHorizontal = horizontalEncoder.get_position() * degreesToInches;
+        double currentHorizontal =
+            horizontalEncoder.get_position() * degreesToInches;
 
         double currentHeading =
             imu.get_heading();
 
-
-        // Calculate changes
         double dVertical =
             currentVertical - lastVertical;
 
@@ -62,80 +59,45 @@ void odometry(void*) {
         double dHeading =
             currentHeading - lastHeading;
 
-
-        // Handle heading wraparound
         if (dHeading > 180)
             dHeading -= 360;
 
         if (dHeading < -180)
             dHeading += 360;
 
-
-        // Convert heading change to radians
         double dTheta =
             dHeading * M_PI / 180.0;
 
+        dVertical -= verticalOffset * dTheta;
+        dHorizontal -= horizontalOffset * dTheta;
 
-        // Remove movement caused by robot rotation
-        double localY =
-            dVertical - verticalOffset * dTheta;
+        double averageHeading =
+            (lastHeading + currentHeading) / 2.0;
 
-        double localX =
-            dHorizontal - horizontalOffset * dTheta;
-
-
-        // Arc calculation
-        double deltaX;
-        double deltaY;
-
-        if (fabs(dTheta) < 1e-5) {
-
-            // Straight movement
-            deltaX = localX;
-            deltaY = localY;
-
-        } 
-        else {
-
-            // Arc movement
-            double sinTerm =
-                sin(dTheta / 2.0);
-
-            double scale =
-                2.0 * sinTerm / dTheta;
-
-            deltaX =
-                scale * localX;
-
-            deltaY =
-                scale * localY;
-        }
-
-
-        // Convert robot-relative movement
-        // into field-relative movement
         double theta =
-            lastHeading * M_PI / 180.0;
+            averageHeading * M_PI / 180.0;
 
-        double globalX =
-            deltaX * cos(theta) +
-            deltaY * sin(theta);
+        double deltaX =
+            dHorizontal * cos(theta) +
+            dVertical * sin(theta);
 
-        double globalY =
-            deltaY * cos(theta) -
-            deltaX * sin(theta);
+        double deltaY =
+            dVertical * cos(theta) -
+            dHorizontal * sin(theta);
 
-
-        // Update position
-        posX += globalX;
-        posY += globalY;
+        posX += deltaX;
+        posY += deltaY;
 
         posHeading = currentHeading;
-
 
         lastVertical = currentVertical;
         lastHorizontal = currentHorizontal;
         lastHeading = currentHeading;
+
+        pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %f, Horizontal: %f",posY, posX);
+        pros::c::screen_print(pros::E_TEXT_MEDIUM, 5, "theta: %f", dHeading);
+        pros::c::screen_print(pros::E_TEXT_MEDIUM, 7, "DVertical: %f, DHorizontal: %f",deltaY, deltaX);
+
 
         pros::delay(10);
     }

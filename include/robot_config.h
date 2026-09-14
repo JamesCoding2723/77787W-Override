@@ -33,8 +33,6 @@ extern pros::MotorGroup left_motor_group;
 // right group
 extern pros::MotorGroup right_motor_group;
 
-extern lemlib::Drivetrain drivetrain;
-
 extern pros::Rotation horizontalEncoder;
 extern pros::Rotation verticalEncoder;
 
