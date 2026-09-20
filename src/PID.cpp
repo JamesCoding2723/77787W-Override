@@ -6,12 +6,11 @@
 #include <algorithm>
 #include "robot_config.h"
 #include "basic_functions.h"
-#include "odom.h"
 
 
 float InchToEncoderunit(float distance)
 {
-  return ((distance * 360) / 10.21017) * (4 / 3); // gear ratio is 4:3
+  return ((distance * 360) / 10.21017) * (4.0 / 3); // gear ratio is 4:3
 }
 
 

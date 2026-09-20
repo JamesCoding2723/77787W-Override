@@ -1,8 +1,5 @@
-#include "pros/motors.h"
-#include "pros/rtos.h"
 #include "pros/screen.h"
 #include <cmath>
-#include <iostream>
 #include <algorithm>
 #include "robot_config.h"
 #include "basic_functions.h"
@@ -25,8 +22,8 @@ void odometry(void*) {
     const double wheelDiameter = 2;
     const double degreesToInches = (M_PI * wheelDiameter) / 360.0 / 100.0;
 
-    const double verticalOffset = 0.0;
-    const double horizontalOffset = 0.0;
+    const double verticalOffset = 0.0;  //NEED TO CHECK
+    const double horizontalOffset = 0.0;   //NEED TO CHECK
 
     verticalEncoder.set_position(0);
     horizontalEncoder.set_position(0);
