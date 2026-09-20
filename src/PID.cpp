@@ -9,7 +9,6 @@
 #include "odom.h"
 
 
-
 float InchToEncoderunit(float distance)
 {
   return ((distance * 360) / 10.21017) * (4 / 3); // gear ratio is 4:3
@@ -682,9 +681,9 @@ void pidmove(float target_inch, float settletime_TOL, float timeout, float max, 
 
 
   float lastError;
-  float kp = 5.1; // for new robot
+  float kp = 6.0; // for new robot
   float kd = 0.2; // for new robot
-  float ki = 0.0; // for new roobot
+  float ki = 0.2; // for new roobot
   float s_error = 0;
   float spd;
 
@@ -724,13 +723,15 @@ void pidmove(float target_inch, float settletime_TOL, float timeout, float max, 
     {
       stop();
       break;
+            
     }
+   //pros::c::screen_print(pros::E_TEXT_MEDIUM, 2, "pid: %f", error);  
 
     float I = ki * s_error;
     lastError = error;
     spd = (P + D + I);
     move(std::clamp(spd, -max, max));
     repeat++;
-    pros::c::delay(15);
+    pros::c::delay(10);
   }
 }

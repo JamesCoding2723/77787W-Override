@@ -6,7 +6,6 @@ extern float posX;
 extern float posY;
 extern double posHeading;
 
-
 extern double localX;
 extern double localY;
 

@@ -26,7 +26,7 @@ void initialize()
     middle_right_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     back_right_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     
-    leftintakem.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    //leftintakem.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
     pros::lcd::initialize(); // initialize brain screen
     imu.tare();     // calibrate sensors
@@ -86,6 +86,13 @@ void autonomous()
     setintake2spd(0);
     setintakespd(0);
 
+    
+    pros::delay(6000);
+    moveToPoint(0, 10, 5, 40, 3, 50, 1, 1);
+
+
+
+
     //auto_skills();
 
     // Right_3_4();
@@ -140,7 +147,7 @@ void opcontrol()
     middle_right_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     back_right_motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-    const float Joystick_LowerDeadzone = 5;
+    const float Joystick_LowerDeadzone = 7;
 
    
     while (true)

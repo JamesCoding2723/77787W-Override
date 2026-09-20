@@ -13,6 +13,7 @@ float posX = 0;
 float posY = 0;
 double posHeading = 0;
 
+
 // Previous sensor values
 double lastVertical = 0;
 double lastHorizontal = 0;
@@ -30,19 +31,20 @@ void odometry(void*) {
     verticalEncoder.set_position(0);
     horizontalEncoder.set_position(0);
 
-    lastVertical = 0;
-    lastHorizontal = 0;
+    lastVertical = 0.0;
+    lastHorizontal = 0.0;
     lastHeading = imu.get_heading();
 
-    pros::delay(4000);
+    pros::delay(5000);
 
-    posX = 0;
-    posY = 0;
+
+    posX = 0.0;
+    posY = 0.0;
 
     while (true) {
 
         double currentVertical =
-            verticalEncoder.get_position() * degreesToInches;
+            -verticalEncoder.get_position() * degreesToInches;
 
         double currentHorizontal =
             horizontalEncoder.get_position() * degreesToInches;
@@ -95,9 +97,8 @@ void odometry(void*) {
         lastHeading = currentHeading;
 
         pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %f, Horizontal: %f",posY, posX);
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 5, "theta: %f", dHeading);
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 7, "DVertical: %f, DHorizontal: %f",deltaY, deltaX);
-
+        //pros::c::screen_print(pros::E_TEXT_MEDIUM, 7, "VerticalE: %f, HorizontalE: %f",verticalEncoder.get_position(), horizontalEncoder.get_position());
+        
 
         pros::delay(10);
     }
@@ -124,7 +125,7 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
     double kD_drive = 0.2;
 
     // Turn PID
-    double kP_turn = 2.0;
+    double kP_turn = 1.0;
     double kI_turn = 0.0;
     double kD_turn = 7.0;
 
@@ -260,13 +261,9 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
         // E_TOL = position error tolerance
         // D_TOL = speed/error-change tolerance
      
-
-        double driveSpeed =
-            fabs(driveError - drivePrevError);
-
         if (
             fabs(driveError) < E_TOL &&
-            driveSpeed < D_TOL
+            ((leftPower+rightPower)/2) < D_TOL
         ) {
             settleTime += 1;
         }
