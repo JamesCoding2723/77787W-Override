@@ -256,12 +256,10 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
 
         // Early jumpout
         // E_TOL = position error tolerance
-        // D_TOL = speed/error-change tolerance
+        // D_TOL = speed tolerance
      
         if (
-            fabs(driveError) < E_TOL &&
-            ((leftPower+rightPower)/2) < D_TOL
-        ) {
+            fabs(driveError) < E_TOL && ((leftPower+rightPower)/2) < D_TOL) {
             settleTime += 1;
         }
         else {
@@ -269,27 +267,20 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
         }
 
 
-        // ====================================================
         // Save previous values
-        // ====================================================
 
         drivePrevError = driveError;
         turnPrevError = turnError;
 
 
-        // ====================================================
         // Timeout
-        // ====================================================
 
         if (repeat > timeout * 50) {
 
             break;
         }
 
-
-        // ====================================================
         // Settled
-        // ====================================================
 
         if (settleTime > _settle) {
 
