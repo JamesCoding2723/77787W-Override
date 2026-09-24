@@ -113,8 +113,10 @@ double angleRange(double angle) {
 }
 
 
-void moveToPoint(double targetX, double targetY,double timeout,double max, double E_TOL, double D_TOL, double _settle, float spdmod) 
-{
+void moveToPoint(double targetX, double targetY, double timeout, double max,
+                  double E_TOL, double D_TOL, double _settle, float spdmod,
+                  double _turnscale = 0, double _drivescale = 0,
+                  double headingLockDist = 2.0) {
 
     // Drive PID
     double kP_drive = 5.0;
@@ -129,20 +131,14 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
     double driveS_error = 0;
     double turnS_error = 0;
 
-    double driveError = 0;
-    double drivePrevError = 0;
-
-    double turnError = 0;
-    double turnPrevError = 0;
+    double driveError = 0, drivePrevError = 0;
+    double turnError = 0, turnPrevError = 0;
 
     double settleTime = 0;
     int repeat = 0;
 
-
     while (true) {
-
         repeat++;
-
 
         // ====================================================
         // Position error
@@ -151,158 +147,45 @@ void moveToPoint(double targetX, double targetY,double timeout,double max, doubl
         double errorX = targetX - posX;
         double errorY = targetY - posY;
 
-        double distance =
-            sqrt(errorX * errorX + errorY * errorY);
-
+        double distance = sqrt(errorX * errorX + errorY * errorY);
         driveError = distance;
 
+        // Target heading toward point — frozen once close, to avoid
+        // atan2 instability from tiny positional noise near the target
+        double targetHeading;
+        if (distance > headingLockDist) {
+            targetHeading = atan2(errorX, errorY) * 180.0 / M_PI;
+            if (targetHeading < 0) targetHeading += 360;
+        } else {
+            targetHeading = posHeading;
+        }
 
-        // Calculate heading toward point
-
-        double targetHeading =
-            atan2(errorX, errorY) * 180.0 / M_PI;
-
-        if (targetHeading < 0)
-            targetHeading += 360;
-
-
+        // ====================================================
         // Drive PID
+        // ====================================================
 
-        float driveP =
-            driveError * kP_drive;
-
-        float driveD =
-            (driveError - drivePrevError) * kD_drive;
+        float driveP = driveError * kP_drive;
+        float driveD = (driveError - drivePrevError) * kD_drive;
 
         driveS_error += driveError;
-
         driveS_error = fmin(driveS_error, 100);
         driveS_error = fmax(driveS_error, -100);
+        if (driveError * drivePrevError < 0) driveS_error = 0;
 
-        if (driveError * drivePrevError < 0)
-            driveS_error = 0;
+        float driveI = kI_drive * driveS_error;
 
-        float driveI =
-            kI_drive * driveS_error;
+        double driveOutput = (driveP + driveI + driveD) * spdmod;
 
-        double driveOutput =
-            (driveP + driveI + driveD) * spdmod;
-
-
+        // ====================================================
         // Turn PID
-
-
-        turnError =
-            angleRange(targetHeading - posHeading);
-
-        float turnP =
-            turnError * kP_turn;
-
-        float turnD =
-            (turnError - turnPrevError) * kD_turn;
-
-        turnS_error += turnError;
-
-        turnS_error = fmin(turnS_error, 100);
-        turnS_error = fmax(turnS_error, -100);
-
-        if (turnError * turnPrevError < 0)
-            turnS_error = 0;
-
-        float turnI =
-            kI_turn * turnS_error;
-
-        double turnOutput =
-            (turnP + turnI + turnD) * spdmod;
-
-
-        // ====================================================
-        // Motor outputs
         // ====================================================
 
-        double leftPower =
-            driveOutput + turnOutput;
+        turnError = angleRange(targetHeading - posHeading);
 
-        double rightPower =
-            driveOutput - turnOutput;
-
-
-        // Scale both sides if necessary
-        double maxMag =
-            std::max(
-                fabs(leftPower),
-                fabs(rightPower)
-            );
-
-        if (maxMag > 100) {
-
-            double scale =
-                100 / maxMag;
-
-            leftPower *= scale;
-            rightPower *= scale;
-        }
-
-        leftPower =
-            std::clamp(leftPower, -max, max);
-
-        rightPower =
-            std::clamp(rightPower, -max, max);
-
-
-        moveleft(leftPower);
-        moveright(rightPower);
-
-
-        // Early jumpout
-        // E_TOL = position error tolerance
-        // D_TOL = speed tolerance
-     
-        if (
-            fabs(driveError) < E_TOL && ((leftPower+rightPower)/2) < D_TOL) {
-            settleTime += 1;
-        }
-        else {
-            settleTime = 0;
-        }
-
-
-        // Save previous values
-
-        drivePrevError = driveError;
-        turnPrevError = turnError;
-
-
-        // Timeout
-
-        if (repeat > timeout * 50) {
-
-            break;
-        }
-
-        // Settled
-
-        if (settleTime > _settle) {
-
-            break;
-        }
-
-
-        pros::c::screen_print(
-            pros::E_TEXT_MEDIUM,
-            5,
-            "P: %f, X: %f, Y: %f, D: %f",
-            leftPower,
-            posX,
-            posY,
-            driveError
-        );
-
-        pros::delay(20);
+        // Wrap the derivative delta too — a raw subtraction of two
+        // already-wrapped errors can spike hugely across the
     }
 }
-
-
 // ============================================================
 // MOVE TO POSE
 // ============================================================
@@ -373,6 +256,11 @@ void moveToPose(
         turnError =
             angleRange(targetHeading - posHeading);
 
+        // Wrap the derivative delta too — a raw subtraction of two
+        // already-wrapped errors can spike hugely across the ±180 boundary
+        double turnDelta =
+            angleRange(turnError - turnPrevError);
+
 
         // ====================================================
         // Drive PID
@@ -407,7 +295,7 @@ void moveToPose(
             turnError * kP_turn;
 
         float turnD =
-            (turnError - turnPrevError) * kD_turn;
+            turnDelta * kD_turn;
 
         turnS_error += turnError;
 
