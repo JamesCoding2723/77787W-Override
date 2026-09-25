@@ -17,87 +17,110 @@ double lastHorizontal = 0;
 double lastHeading = 0;
 
 void odometry(void*) {
-    
-
-    const double wheelDiameter = 2;
-    const double degreesToInches = (M_PI * wheelDiameter) / 360.0 / 100.0;
-
-    const double verticalOffset = 0.0;  //NEED TO CHECK
-    const double horizontalOffset = 0.0;   //NEED TO CHECK
-
-    verticalEncoder.set_position(0);
-    horizontalEncoder.set_position(0);
-
-    lastVertical = 0.0;
-    lastHorizontal = 0.0;
-    lastHeading = imu.get_heading();
-
-    pros::delay(5000);
 
 
-    posX = 0.0;
-    posY = 0.0;
+const double wheelDiameter = 2;
+const double degreesToInches = (M_PI * wheelDiameter) / 360.0 / 100.0;
 
-    while (true) {
+const double verticalOffset = 0.0;  //NEED TO CHECK
+const double horizontalOffset = 0.0;   //NEED TO CHECK
 
-        double currentVertical =
-            -verticalEncoder.get_position() * degreesToInches;
+verticalEncoder.set_position(0);
+horizontalEncoder.set_position(0);
 
-        double currentHorizontal =
-            horizontalEncoder.get_position() * degreesToInches;
+lastVertical = 0.0;
+lastHorizontal = 0.0;
+lastHeading = imu.get_heading();
 
-        double currentHeading =
-            imu.get_heading();
+pros::delay(5000);
 
-        double dVertical =
-            currentVertical - lastVertical;
 
-        double dHorizontal =
-            currentHorizontal - lastHorizontal;
+posX = 0.0;
+posY = 0.0;
 
-        double dHeading =
-            currentHeading - lastHeading;
+while (true) {
 
-        if (dHeading > 180)
-            dHeading -= 360;
+double currentVertical =
+-verticalEncoder.get_position() * degreesToInches;
 
-        if (dHeading < -180)
-            dHeading += 360;
+double currentHorizontal =
+horizontalEncoder.get_position() * degreesToInches;
 
-        double dTheta =
-            dHeading * M_PI / 180.0;
+double currentHeading =
+imu.get_heading();
 
-        dVertical -= verticalOffset * dTheta;
-        dHorizontal -= horizontalOffset * dTheta;
+double dVertical =
+currentVertical - lastVertical;
 
-        double averageHeading =
+double dHorizontal =
+currentHorizontal - lastHorizontal;
+
+double dHeading =
+currentHeading - lastHeading;
+
+if (dHeading > 180)
+dHeading -= 360;
+
+if (dHeading < -180)
+dHeading += 360;
+
+double dTheta =
+dHeading * M_PI / 180.0;
+
+double dVerticalCorrected =
+dVertical - verticalOffset * dTheta;
+
+double dHorizontalCorrected =
+dHorizontal - horizontalOffset * dTheta;
+
+double averageHeading =
             (lastHeading + currentHeading) / 2.0;
 
-        double theta =
-            averageHeading * M_PI / 180.0;
+double theta =
+averageHeading * M_PI / 180.0;
 
-        double deltaX =
-            dHorizontal * cos(theta) +
-            dVertical * sin(theta);
+// Arc-length correction: when the robot turns while moving between
+// updates, the true displacement is a chord of an arc, not a straight
+// line. This factor corrects for that; falls back to straight-line
+// motion when dTheta is ~0 to avoid dividing by zero.
+double localX, localY;
 
-        double deltaY =
-            dVertical * cos(theta) -
-            dHorizontal * sin(theta);
+if (fabs(dTheta) < 1e-9) {
+localX = dHorizontalCorrected;
+localY = dVerticalCorrected;
+}
+else {
+double sinFactor =
+2.0 * sin(dTheta / 2.0);
 
-        posX += deltaX;
-        posY += deltaY;
+localX =
+sinFactor * (dHorizontalCorrected / dTheta + horizontalOffset);
 
-        posHeading = currentHeading;
+localY =
+sinFactor * (dVerticalCorrected / dTheta + verticalOffset);
+}
 
-        lastVertical = currentVertical;
-        lastHorizontal = currentHorizontal;
-        lastHeading = currentHeading;
+double deltaX =
+localX * cos(theta) +
+localY * sin(theta);
 
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %f, Horizontal: %f",posY, posX);
+double deltaY =
+localY * cos(theta) -
+localX * sin(theta);
+
+posX += deltaX;
+posY += deltaY;
+
+posHeading = currentHeading;
+
+lastVertical = currentVertical;
+lastHorizontal = currentHorizontal;
+lastHeading = currentHeading;
+
+pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %f, Horizontal: %f",posY, posX);
         //pros::c::screen_print(pros::E_TEXT_MEDIUM, 7, "VerticalE: %f, HorizontalE: %f",verticalEncoder.get_position(), horizontalEncoder.get_position());
-        
 
-        pros::delay(10);
+pros::delay(10);
     }
 }
 
