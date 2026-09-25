@@ -22,8 +22,8 @@ void odometry(void*) {
 const double wheelDiameter = 2;
 const double degreesToInches = (M_PI * wheelDiameter) / 360.0 / 100.0;
 
-const double verticalOffset = 0.0;  //NEED TO CHECK
-const double horizontalOffset = 0.0;   //NEED TO CHECK
+const double verticalOffset = -0.75;  //NEED TO CHECK
+const double horizontalOffset = 0.25;   //NEED TO CHECK
 
 verticalEncoder.set_position(0);
 horizontalEncoder.set_position(0);
@@ -32,7 +32,7 @@ lastVertical = 0.0;
 lastHorizontal = 0.0;
 lastHeading = imu.get_heading();
 
-pros::delay(5000);
+pros::delay(2000);
 
 
 posX = 0.0;
@@ -138,8 +138,8 @@ double angleRange(double angle) {
 
 void moveToPoint(double targetX, double targetY, double timeout, double max,
                   double E_TOL, double D_TOL, double _settle, float spdmod,
-                  double _turnscale = 0, double _drivescale = 0,
-                  double headingLockDist = 2.0) {
+                  double _turnscale, double _drivescale ,
+                  double headingLockDist) {
 
     // Drive PID
     double kP_drive = 5.0;
@@ -147,9 +147,9 @@ void moveToPoint(double targetX, double targetY, double timeout, double max,
     double kD_drive = 0.2;
 
     // Turn PID
-    double kP_turn = 1.0;
+    double kP_turn = 1.8;
     double kI_turn = 0.0;
-    double kD_turn = 7.0;
+    double kD_turn = 7.5;
 
     double driveS_error = 0;
     double turnS_error = 0;
@@ -206,12 +206,83 @@ void moveToPoint(double targetX, double targetY, double timeout, double max,
         turnError = angleRange(targetHeading - posHeading);
 
         // Wrap the derivative delta too — a raw subtraction of two
-        // already-wrapped errors can spike hugely across the
+        // already-wrapped errors can spike hugely across the ±180 boundary
+        double turnDelta = angleRange(turnError - turnPrevError);
+
+        float turnP = turnError * kP_turn;
+        float turnD = turnDelta * kD_turn;
+
+        turnS_error += turnError;
+        turnS_error = fmin(turnS_error, 100);
+        turnS_error = fmax(turnS_error, -100);
+        if (turnError * turnPrevError < 0) turnS_error = 0;
+
+        float turnI = kI_turn * turnS_error;
+
+        double turnOutput = (turnP + turnI + turnD) * spdmod;
+
+        // ====================================================
+        // Optional scale coupling — disabled (1.0) unless explicitly set
+        // ====================================================
+
+        double turnScale = (_turnscale <= 0)
+            ? 1.0
+            : 1.0 - std::min(fabs(turnError) / _turnscale, 1.0);
+
+        double driveScale = (_drivescale <= 0)
+            ? 1.0
+            : 1.0 - std::min(fabs(driveError) / _drivescale, 1.0);
+
+        driveOutput *= turnScale;
+        turnOutput *= driveScale;
+
+        // ====================================================
+        // Motor outputs
+        // ====================================================
+
+        double leftPower = driveOutput + turnOutput;
+        double rightPower = driveOutput - turnOutput;
+
+        double maxMag = std::max(fabs(leftPower), fabs(rightPower));
+        if (maxMag > 100) {
+            double scale = 100 / maxMag;
+            leftPower *= scale;
+            rightPower *= scale;
+        }
+
+        leftPower = std::clamp(leftPower, -max, max);
+        rightPower = std::clamp(rightPower, -max, max);
+
+        moveleft(leftPower);
+        moveright(rightPower);
+
+        // ====================================================
+        // Early jumpout
+        // ====================================================
+
+        if (fabs(driveError) < E_TOL && ((leftPower + rightPower) / 2) < D_TOL) {
+            settleTime += 1;
+        } else {
+            settleTime = 0;
+        }
+
+        drivePrevError = driveError;
+        turnPrevError = turnError;
+
+        if (repeat > timeout * 50) break;
+        if (settleTime > _settle) break;
+
+        pros::c::screen_print(
+            pros::E_TEXT_MEDIUM, 5,
+            "P: %f, X: %f, Y: %f, D: %f",
+            turnError, posX, posY, driveError
+        );
+
+        pros::delay(20);
     }
 }
-// ============================================================
-// MOVE TO POSE
-// ============================================================
+
+
 
 void moveToPose(
     double targetX,
@@ -222,7 +293,10 @@ void moveToPose(
     double E_TOL,
     double D_TOL,
     double _settle,
-    float spdmod
+    float spdmod,
+    double blendDist,
+    double _turnscale,
+    double _drivescale
 ) {
 
     // Drive PID
@@ -231,9 +305,9 @@ void moveToPose(
     double kD_drive = 0.2;
 
     // Turn PID
-    double kP_turn = 2.0;
+    double kP_turn = 1.8;
     double kI_turn = 0.0;
-    double kD_turn = 7.0;
+    double kD_turn = 7.5;
 
     double driveS_error = 0;
     double turnS_error = 0;
@@ -273,11 +347,43 @@ void moveToPose(
 
 
         // ====================================================
+        // Blended heading target
+        //
+        // Far from the point: chase the point's direction (like moveToPoint).
+        // Near the point: blend toward the final targetHeading, so the
+        // robot rotates into its final pose only once it has basically
+        // arrived, instead of turning-in-place up front.
+        // ====================================================
+
+        double pointHeading =
+            atan2(errorX, errorY) * 180.0 / M_PI;
+
+        if (pointHeading < 0)
+            pointHeading += 360;
+
+        double blend =
+            1.0 - std::min(distance / blendDist, 1.0);
+        // blend: 0 = fully chase the point, 1 = fully chase targetHeading
+
+        double headingDiff =
+            angleRange(targetHeading - pointHeading);
+
+        double desiredHeading =
+            pointHeading + headingDiff * blend;
+
+        if (desiredHeading < 0)
+            desiredHeading += 360;
+
+        if (desiredHeading >= 360)
+            desiredHeading -= 360;
+
+
+        // ====================================================
         // Turn error
         // ====================================================
 
         turnError =
-            angleRange(targetHeading - posHeading);
+            angleRange(desiredHeading - posHeading);
 
         // Wrap the derivative delta too — a raw subtraction of two
         // already-wrapped errors can spike hugely across the ±180 boundary
@@ -336,6 +442,24 @@ void moveToPose(
 
 
         // ====================================================
+        // Optional scale coupling — disabled (1.0) unless explicitly set
+        // ====================================================
+
+        double turnScale =
+            (_turnscale <= 0)
+                ? 1.0
+                : 1.0 - std::min(fabs(turnError) / _turnscale, 1.0);
+
+        double driveScale =
+            (_drivescale <= 0)
+                ? 1.0
+                : 1.0 - std::min(fabs(driveError) / _drivescale, 1.0);
+
+        driveOutput *= turnScale;
+        turnOutput *= driveScale;
+
+
+        // ====================================================
         // Motor outputs
         // ====================================================
 
@@ -385,7 +509,7 @@ void moveToPose(
         if (
             fabs(driveError) < E_TOL &&
             driveSpeed < D_TOL &&
-            fabs(turnError) < 2
+            fabs(angleRange(targetHeading - posHeading)) < 2
         ) {
             settleTime += 1;
         }
@@ -425,11 +549,12 @@ void moveToPose(
         pros::c::screen_print(
             pros::E_TEXT_MEDIUM,
             5,
-            "P: %f, X: %f, Y: %f, H: %f",
+            "P: %f, X: %f, Y: %f, H: %f, blend: %f",
             leftPower,
             posX,
             posY,
-            posHeading
+            posHeading,
+            blend
         );
 
         pros::delay(20);

@@ -138,9 +138,9 @@ void pidTurnAbs(float target, float rotate_tolocal, float timeout, float max)
   float dTol = rotate_tolocal;
   float lastError;
   float error;
-  float kp = 1.7;      // for new robot
-  float kd = 7.0;      // for new robot
-  float ki = 0.15;     // for new robot
+  float kp = 1.8;      // for new robot
+  float kd = 7.5;      // for new robot
+  float ki = 0.0;     // for new robot
   //float spd_ratio = 2; // 0.5
   float s_error = 0;
   int n = 0;

@@ -24,12 +24,12 @@ pros::ADIDigitalOut jeminpark('F', false);
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Motor front_left_motor(9, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
-pros::Motor middle_left_motor(10, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
-pros::Motor back_left_motor(17, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
-pros::Motor front_right_motor(-13, pros::E_MOTOR_GEAR_BLUE); // front right motor 15
-pros::Motor middle_right_motor(-12, pros::E_MOTOR_GEAR_BLUE); // middle right motor 17
-pros::Motor back_right_motor(-11, pros::E_MOTOR_GEAR_BLUE); // back right motor 16
+pros::Motor front_left_motor(-13, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
+pros::Motor middle_left_motor(-12, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
+pros::Motor back_left_motor(-11, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
+pros::Motor front_right_motor(9, pros::E_MOTOR_GEAR_BLUE); // front right motor 9
+pros::Motor middle_right_motor(10, pros::E_MOTOR_GEAR_BLUE); // middle right motor 10
+pros::Motor back_right_motor(17, pros::E_MOTOR_GEAR_BLUE); // back right motor 17
 
 
 pros::Optical top_color_sensor(14); 

@@ -86,10 +86,19 @@ void autonomous()
     setintake2spd(0);
     setintakespd(0);
 
-    
-    pros::delay(6000);
-    moveToPoint(0, 10, 5, 40, 3, 50, 1, 1);
+    //pidmove(10, 1, 1, 40);
 
+    //pidTurnAbs(90, 1, 2);
+    
+    //pros::delay(3000);
+    
+    moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
+    //stop();
+    /*moveToPoint(10, 10, 5, 80, 1, 50, 5,1);
+    stop();*/
+    moveToPoint(0, 0, 5, 80, 1, 20, 5, 1, 90);
+    stop();
+    pidTurnAbs(0, 1, 3);
 
 
 
