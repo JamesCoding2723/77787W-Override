@@ -58,14 +58,11 @@ currentHorizontal - lastHorizontal;
 double dHeading =
 currentHeading - lastHeading;
 
-if (dHeading > 180)
-dHeading -= 360;
+if (dHeading > 180) dHeading -= 360;
 
-if (dHeading < -180)
-dHeading += 360;
+if (dHeading < -180) dHeading += 360;
 
-double dTheta =
-dHeading * M_PI / 180.0;
+double dTheta = dHeading * M_PI / 180.0;
 
 double dVerticalCorrected =
 dVertical - verticalOffset * dTheta;
@@ -284,20 +281,15 @@ void moveToPoint(double targetX, double targetY, double timeout, double max,
 
 
 
-void moveToPose(
-    double targetX,
-    double targetY,
-    double targetHeading,
-    double timeout,
-    double max,
-    double E_TOL,
-    double D_TOL,
-    double _settle,
-    float spdmod,
-    double blendDist,
-    double _turnscale,
-    double _drivescale
-) {
+void moveToPose(double targetX, double targetY, double targetHeading,
+                double timeout, double max,
+                double E_TOL, double D_TOL, double _settle,
+                float spdmod, double _turnscale, double _drivescale,
+                double headingLockDist) {
+
+    // ====================================================
+    // PID constants
+    // ====================================================
 
     // Drive PID
     double kP_drive = 5.0;
@@ -321,82 +313,78 @@ void moveToPose(
     double settleTime = 0;
     int repeat = 0;
 
+    // Make sure target heading is in [0, 360)
+    targetHeading = fmod(targetHeading, 360.0);
+    if (targetHeading < 0)
+        targetHeading += 360.0;
 
     while (true) {
-
         repeat++;
-
 
         // ====================================================
         // Position error
         // ====================================================
 
-        double errorX =
-            targetX - posX;
+        double errorX = targetX - posX;
+        double errorY = targetY - posY;
 
-        double errorY =
-            targetY - posY;
-
-        double distance =
-            sqrt(
-                errorX * errorX +
-                errorY * errorY
-            );
+        double distance = sqrt(
+            errorX * errorX +
+            errorY * errorY
+        );
 
         driveError = distance;
 
-
         // ====================================================
-        // Blended heading target
-        //
-        // Far from the point: chase the point's direction (like moveToPoint).
-        // Near the point: blend toward the final targetHeading, so the
-        // robot rotates into its final pose only once it has basically
-        // arrived, instead of turning-in-place up front.
+        // Heading targets
         // ====================================================
 
+        // Heading needed to face the target point
         double pointHeading =
             atan2(errorX, errorY) * 180.0 / M_PI;
 
         if (pointHeading < 0)
-            pointHeading += 360;
+            pointHeading += 360.0;
 
-        double blend =
-            1.0 - std::min(distance / blendDist, 1.0);
-        // blend: 0 = fully chase the point, 1 = fully chase targetHeading
+        /*
+         * Far away:
+         *     face toward the target point.
+         *
+         * Near the target:
+         *     transition toward the requested final heading.
+         *
+         * This allows the robot to drive toward the point while
+         * gradually rotating into the final pose.
+         */
 
-        double headingDiff =
-            angleRange(targetHeading - pointHeading);
+        double targetTurnHeading;
 
-        double desiredHeading =
-            pointHeading + headingDiff * blend;
+        if (headingLockDist <= 0 || distance >= headingLockDist) {
+            targetTurnHeading = pointHeading;
+        }
+        else {
+            // 0 = at final position
+            // 1 = at edge of headingLockDist
+            double ratio = distance / headingLockDist;
 
-        if (desiredHeading < 0)
-            desiredHeading += 360;
+            // Interpolate using the shortest angular path
+            double headingDifference =
+                angleRange(targetHeading - pointHeading);
 
-        if (desiredHeading >= 360)
-            desiredHeading -= 360;
+            targetTurnHeading =
+                pointHeading + headingDifference * (1.0 - ratio);
 
+            targetTurnHeading = fmod(targetTurnHeading, 360.0);
 
-        // ====================================================
-        // Turn error
-        // ====================================================
-
-        turnError =
-            angleRange(desiredHeading - posHeading);
-
-        // Wrap the derivative delta too — a raw subtraction of two
-        // already-wrapped errors can spike hugely across the ±180 boundary
-        double turnDelta =
-            angleRange(turnError - turnPrevError);
-
+            if (targetTurnHeading < 0)
+                targetTurnHeading += 360.0;
+        }
 
         // ====================================================
         // Drive PID
         // ====================================================
 
-        float driveP =
-            driveError * kP_drive;
+        float driveP = driveError * kP_drive;
 
         float driveD =
             (driveError - drivePrevError) * kD_drive;
@@ -415,10 +403,16 @@ void moveToPose(
         double driveOutput =
             (driveP + driveI + driveD) * spdmod;
 
-
         // ====================================================
         // Turn PID
         // ====================================================
+
+        turnError =
+            angleRange(targetTurnHeading - posHeading);
+
+        // Wrapped derivative
+        double turnDelta =
+            angleRange(turnError - turnPrevError);
 
         float turnP =
             turnError * kP_turn;
@@ -440,24 +434,30 @@ void moveToPose(
         double turnOutput =
             (turnP + turnI + turnD) * spdmod;
 
-
         // ====================================================
-        // Optional scale coupling — disabled (1.0) unless explicitly set
+        // Scale coupling
         // ====================================================
 
         double turnScale =
             (_turnscale <= 0)
                 ? 1.0
-                : 1.0 - std::min(fabs(turnError) / _turnscale, 1.0);
+                : 1.0 -
+                  std::min(
+                      fabs(turnError) / _turnscale,
+                      1.0
+                  );
 
         double driveScale =
             (_drivescale <= 0)
                 ? 1.0
-                : 1.0 - std::min(fabs(driveError) / _drivescale, 1.0);
+                : 1.0 -
+                  std::min(
+                      fabs(driveError) / _drivescale,
+                      1.0
+                  );
 
         driveOutput *= turnScale;
         turnOutput *= driveScale;
-
 
         // ====================================================
         // Motor outputs
@@ -469,7 +469,7 @@ void moveToPose(
         double rightPower =
             driveOutput - turnOutput;
 
-
+        // Preserve ratio if either side exceeds 100
         double maxMag =
             std::max(
                 fabs(leftPower),
@@ -477,9 +477,7 @@ void moveToPose(
             );
 
         if (maxMag > 100) {
-
-            double scale =
-                100 / maxMag;
+            double scale = 100.0 / maxMag;
 
             leftPower *= scale;
             rightPower *= scale;
@@ -491,70 +489,53 @@ void moveToPose(
         rightPower =
             std::clamp(rightPower, -max, max);
 
-
         moveleft(leftPower);
         moveright(rightPower);
 
 
-        // ====================================================
-        // Early jumpout
-        //
-        // Must be at the position AND moving slowly
-        // AND at the correct final heading
-        // ====================================================
 
         double driveSpeed =
             fabs(driveError - drivePrevError);
 
-        if (
-            fabs(driveError) < E_TOL &&
+        if (fabs(driveError) < E_TOL &&
             driveSpeed < D_TOL &&
-            fabs(angleRange(targetHeading - posHeading)) < 2
-        ) {
+            fabs(angleRange(targetHeading - posHeading)) < 2.0) {
+
             settleTime += 1;
         }
         else {
             settleTime = 0;
         }
 
-
-        // ====================================================
-        // Save previous values
-        // ====================================================
-
         drivePrevError = driveError;
         turnPrevError = turnError;
-
 
         // ====================================================
         // Timeout
         // ====================================================
 
-        if (repeat > timeout * 50) {
-
+        if (repeat > timeout * 50)
             break;
-        }
-
 
         // ====================================================
-        // Settled
+        // Successfully reached pose
         // ====================================================
 
-        if (settleTime > _settle) {
-
+        if (settleTime > _settle)
             break;
-        }
 
+        // ====================================================
+        // Debug
+        // ====================================================
 
         pros::c::screen_print(
             pros::E_TEXT_MEDIUM,
             5,
-            "P: %f, X: %f, Y: %f, H: %f, blend: %f",
-            leftPower,
+            "P: %f, X: %f, Y: %f, D: %f",
+            turnError,
             posX,
             posY,
-            posHeading,
-            blend
+            driveError
         );
 
         pros::delay(20);
