@@ -47,7 +47,8 @@ void initialize()
 
     // pros::c::screen_print(pros::E_TEXT_MEDIUM, 4, "encoder unit: %d", front_left_motor.get_encoder_units());
     arminit();                       // arm must be resting on its bottom stop
-    
+
+
     pros::Task Walltask(imu_display_task);
     pros::Task odomTask(odometry);
     pros::Task Armtask(armtask);

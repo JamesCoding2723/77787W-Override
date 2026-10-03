@@ -11,7 +11,7 @@
 #pragma region
 
 pros::Motor clawintakem1(5, pros::E_MOTOR_GEAR_GREEN);
-pros::Motor clawintakem2(-4, pros::E_MOTOR_GEAR_GREEN);
+pros::Motor clawintakem2(-6, pros::E_MOTOR_GEAR_GREEN);
 
 
 pros::ADIDigitalOut jeminmech('A', false);
