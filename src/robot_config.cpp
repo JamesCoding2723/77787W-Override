@@ -10,8 +10,8 @@
 // ROBOT CONFIG  //  PID CONFIG
 #pragma region
 
-pros::Motor clawintakem1(5, pros::E_MOTOR_GEAR_GREEN);
-pros::Motor clawintakem2(-6, pros::E_MOTOR_GEAR_GREEN);
+pros::Motor clawintakem1(-5, pros::E_MOTOR_GEAR_GREEN);
+pros::Motor clawintakem2(6, pros::E_MOTOR_GEAR_GREEN);
 
 
 pros::ADIDigitalOut jeminmech('A', false);
@@ -23,12 +23,12 @@ pros::ADIDigitalOut jeminpark('F', false);
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-pros::Motor front_left_motor(-13, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
-pros::Motor middle_left_motor(-12, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
-pros::Motor back_left_motor(-11, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
-pros::Motor front_right_motor(9, pros::E_MOTOR_GEAR_BLUE); // front right motor 9
-pros::Motor middle_right_motor(10, pros::E_MOTOR_GEAR_BLUE); // middle right motor 10
-pros::Motor back_right_motor(17, pros::E_MOTOR_GEAR_BLUE); // back right motor 17
+pros::Motor front_left_motor(-3, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
+pros::Motor middle_left_motor(-2, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
+pros::Motor back_left_motor(-1, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
+pros::Motor front_right_motor(8, pros::E_MOTOR_GEAR_BLUE); // front right motor 9
+pros::Motor middle_right_motor(9, pros::E_MOTOR_GEAR_BLUE); // middle right motor 10
+pros::Motor back_right_motor(10, pros::E_MOTOR_GEAR_BLUE); // back right motor 17
 
 
 pros::Optical top_color_sensor(14); 
@@ -43,7 +43,7 @@ pros::MotorGroup right_motor_group({front_right_motor, middle_right_motor, back_
 // lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_2, 0);
 // lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_2, 0.75);
 
-pros::Imu imu(2);
+pros::Imu imu(11);
 
 pros::Distance distance_sensor(19);
 pros::Distance frontdistance(11); // 1 is temporary

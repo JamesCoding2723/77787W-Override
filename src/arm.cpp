@@ -7,13 +7,13 @@
 // ------------------------------------------------------------
 // Ports 5, 6 and ADI 'H' are unused in your robot_config.cpp - change if needed.
 // Negative port = reversed motor.
-pros::Motor arm_motorL(5, pros::E_MOTOR_GEAR_RED);
-pros::Motor arm_motorR(-6, pros::E_MOTOR_GEAR_RED);
+pros::Motor arm_motorL(-4, pros::E_MOTOR_GEAR_RED);
+pros::Motor arm_motorR(7, pros::E_MOTOR_GEAR_RED);
 pros::ADIDigitalIn arm_limit('H');       // bottom limit switch
 
 static const bool  USE_LIMIT_SWITCH = false;   // false if you have no switch
 static const float ARM_MIN = 0;               // motor degrees, 0 = resting on bottom
-static const float ARM_MAX = 650;             // lift arm by hand and read the position
+static const float ARM_MAX = 100000000;             // lift arm by hand and read the position
 static const int   DRIVER_MV = 12000;         // driver power (lower = slower arm)
 
 // PID (same idea as a drive PID)
@@ -24,9 +24,8 @@ static const float I_ZONE = 40;   // only build integral within this many degree
 static const float I_MAX = 300;   // clamp on integral sum
 static const float DONE_TOL = 4;  // "arrived" tolerance in degrees
 
-// ------------------------------------------------------------
+
 //  STATE (shared between opcontrol/autonomous and the PID task)
-// ------------------------------------------------------------
 static float armTarget = 0;
 static bool armPidOn = false;
 static bool armSettled = false;
@@ -93,8 +92,8 @@ void armtask()
             prevErr = err;
 
             float out = KP * err + KI * integral + KD * derivative;
-            if (out > 12000) out = 12000;
-            if (out < -12000) out = -12000;
+            if (out > 1000000) out = 1000000;
+            if (out < -2000) out = -2000;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);
