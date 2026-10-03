@@ -4,17 +4,8 @@ int sign(float);
 
 extern int intakespd1;
 
-extern int intakespd2;
-
-extern int intake2spd;
 
 void setintakespd(float);
-
-void setintake3spd(float);
-
-void setintakespddiff(float, float);
-
-void setintake2spd(float);
 
 void intake();
 
@@ -43,26 +34,6 @@ void moveForSec(float, bool, float);
 extern bool jeminmechtoggle;
 
 void jeminmecht();
-
-extern bool jeminloadertoggle;
-
-void jeminloadert();
-
-extern bool jemintaketoggle;
-
-void jemintaket();
-
-extern bool jeminwingtoggle;
-
-void jeminwingt();
-
-extern bool jeminchoptoggle;
-
-void jeminchopt();
-
-extern bool jeminparktoggle;
-
-void jeminparkt();
 
 void moveforward(float, bool, float);
 

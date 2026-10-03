@@ -20,34 +20,28 @@ int sign(float _input)
 }
 
 int intakespd1 = 0;
-int intakespd2 = 0;
 
-int intake2spd = 0;
 
 void setintakespd(float spd)
 {
     intakespd1 = spd;
-    intakespd2 = spd;
 }
 
-void setintakespddiff(float spd1, float spd2)
-{
-    intakespd1 = spd1;
-    intakespd2 = spd2;
-}
-
-void setintake2spd(float spd) 
-{
-    intake2spd = spd;
-}
-
-bool midgoal;
 
 void intake()
 {
     while (true)
     {
-
+        if (intakespd1 == 0)
+        {
+            clawintakem1.brake();  
+            clawintakem2.brake();
+        } 
+        else 
+        {
+            clawintakem1.move((int)1.27 * intakespd1);
+            clawintakem2.move((int)1.27 * intakespd1);
+        }
     }
 }
 

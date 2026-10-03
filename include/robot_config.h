@@ -7,9 +7,8 @@
 #include "pros/rotation.hpp"
 #include <cmath>
 
-extern pros::Motor rightintakem1;
-extern pros::Motor rightintakem2;
-extern pros::Motor leftintakem;
+extern pros::Motor clawintakem1;
+extern pros::Motor clawintakem2;
 
 extern pros::ADIDigitalOut jeminmech;
 extern pros::ADIDigitalOut jeminloader;

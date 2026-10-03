@@ -68,7 +68,7 @@ bin/main.cpp.o: src/main.cpp include/pros/adi.hpp include/pros/adi.h \
  include/pros/motors.hpp include/pros/optical.hpp include/pros/optical.h \
  include/pros/error.h include/pros/rotation.hpp include/pros/rotation.h \
  include/basic_functions.h include/PID.h include/main.h include/odom.h \
- include/auton.h
+ include/auton.h include/arm.h include/main.h
 include/pros/adi.hpp:
 include/pros/adi.h:
 include/pros/llemu.hpp:
@@ -201,3 +201,5 @@ include/PID.h:
 include/main.h:
 include/odom.h:
 include/auton.h:
+include/arm.h:
+include/main.h:

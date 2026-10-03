@@ -10,9 +10,8 @@
 // ROBOT CONFIG  //  PID CONFIG
 #pragma region
 
-pros::Motor rightintakem1(6, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor rightintakem2(15, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor leftintakem(-8, pros::E_MOTOR_GEAR_BLUE);
+pros::Motor clawintakem1(5, pros::E_MOTOR_GEAR_GREEN);
+pros::Motor clawintakem2(-4, pros::E_MOTOR_GEAR_GREEN);
 
 
 pros::ADIDigitalOut jeminmech('A', false);
