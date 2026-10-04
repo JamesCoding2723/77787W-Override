@@ -91,17 +91,19 @@ void autonomous()
 
     //pidmove(10, 1, 1, 40);
 
+    setarmtarget(300);
+
     //pidTurnAbs(90, 1, 2);
     
     //pros::delay(3000);
     
-    moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
+    /*moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
     //stop();
     /*moveToPoint(10, 10, 5, 80, 1, 50, 5,1);
-    stop();*/
+    stop();
     moveToPoint(0, 0, 5, 80, 1, 20, 5, 1, 90);
     stop();
-    pidTurnAbs(0, 1, 3);
+    pidTurnAbs(0, 1, 3);*/
 
 
 
@@ -167,8 +169,8 @@ void opcontrol()
         int leftY = abs(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)) < Joystick_LowerDeadzone ? 0: master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 
         // move the robot
-        moveleft(leftY - 1 * rightX);
-        moveright(leftY + 1 * rightX);
+        moveleft(leftY + 1 * rightX);
+        moveright(leftY - 1 * rightX);
 
 
         

@@ -251,7 +251,7 @@ double getwallpos(float wall_heading)
 float df0 = 3.5;
 double frontwallpos;
 
-double getfrontwallpos(float wall_heading)
+/*double getfrontwallpos(float wall_heading)
 {
     while(true)
     {
@@ -270,7 +270,7 @@ double getfrontwallpos(float wall_heading)
 
         return frontwallpos = ((frontdistance.get())/25.5 + df0) * cos(deg2rad(theta));
     }
-}
+}*/
 
 float deg2rad(float _input) // converts degrees to radians
 {

@@ -1,14 +1,12 @@
 #include "arm.h"
 #include "main.h"
+#include "pros/screen.h"
 #include <cmath>
 
-// ------------------------------------------------------------
 //  CONFIG  (TUNE everything in this block)
-// ------------------------------------------------------------
-// Ports 5, 6 and ADI 'H' are unused in your robot_config.cpp - change if needed.
-// Negative port = reversed motor.
-pros::Motor arm_motorL(-4, pros::E_MOTOR_GEAR_RED);
-pros::Motor arm_motorR(7, pros::E_MOTOR_GEAR_RED);
+
+pros::Motor arm_motorL(4, pros::E_MOTOR_GEAR_RED);
+pros::Motor arm_motorR(-7, pros::E_MOTOR_GEAR_RED);
 pros::ADIDigitalIn arm_limit('H');       // bottom limit switch
 
 static const bool  USE_LIMIT_SWITCH = false;   // false if you have no switch
@@ -17,7 +15,7 @@ static const float ARM_MAX = 100000000;             // lift arm by hand and read
 static const int   DRIVER_MV = 12000;         // driver power (lower = slower arm)
 
 // PID (same idea as a drive PID)
-static const float KP = 45.0;     // mV per degree of error
+static const float KP = 150.0;     // mV per degree of error
 static const float KI = 0.0;      // leave 0 until KP/KD are good
 static const float KD = 130.0;    // damping (per 10 ms loop)
 static const float I_ZONE = 40;   // only build integral within this many degrees
@@ -92,12 +90,13 @@ void armtask()
             prevErr = err;
 
             float out = KP * err + KI * integral + KD * derivative;
-            if (out > 1000000) out = 1000000;
-            if (out < -2000) out = -2000;
+            if (out > 12000) out = 12000;
+            if (out < -12000) out = -12000;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);
         }
+        pros::c::screen_print(pros::E_TEXT_MEDIUM, 7, "ARM_POSITION: %f", armpos());
         pros::delay(10);
     }
 }
@@ -107,19 +106,14 @@ void armdriver(bool up, bool down)
 {
     armPidOn = false; // driver always wins over the PID task
 
-    bool bottom = USE_LIMIT_SWITCH && arm_limit.get_value() == 1;
-    if (bottom) // re-zero every time it touches the switch
-    {
-        arm_motorL.tare_position();
-        arm_motorR.tare_position();
-    }
+
     float pos = armpos();
     int power = 0;
     if (up && !down) power = DRIVER_MV;
     else if (down && !up) power = -DRIVER_MV;
 
-    if (power > 0 && pos >= ARM_MAX) power = 0;
-    if (power < 0 && (pos <= ARM_MIN || bottom)) power = 0;
+    //if (power > 0 && pos >= ARM_MAX) power = 0;
+    //if (power < 0 && (pos <= ARM_MIN )) power = 0;
 
     if (power == 0)
         armbrake(); // holds position
