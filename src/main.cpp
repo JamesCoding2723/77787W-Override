@@ -99,7 +99,7 @@ void autonomous()
     
     /*moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
     //stop();
-    /*moveToPoint(10, 10, 5, 80, 1, 50, 5,1);
+    moveToPoint(10, 10, 5, 80, 1, 50, 5,1);
     stop();
     moveToPoint(0, 0, 5, 80, 1, 20, 5, 1, 90);
     stop();

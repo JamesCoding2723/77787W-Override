@@ -149,78 +149,14 @@ void moveForSec(float spd, bool dir, float secs)
     }
 }
 
-bool jeminmechtoggle = false;
+/*bool jeminmechtoggle = false;
 
 void jeminmecht()
 {
     // bool clamptoggle = false;
     jeminmechtoggle = !jeminmechtoggle;
     jeminmech.set_value(jeminmechtoggle);
-}
-
-bool jeminloadertoggle = false;
-
-void jeminloadert()
-{
-    // bool clamptoggle = false;
-    jeminloadertoggle = !jeminloadertoggle;
-    jeminloader.set_value(jeminloadertoggle);
-}
-
-void setjeminparallel(float _time, bool _active)
-{
-    float delay_time = _time;
-    bool delay_active = _active;
-}
-
-float delay_time;
-bool delay_active;
-
-void jeminloaderd()
-{
-    while(delay_active == true)
-    {
-        pros::delay(delay_time);
-        jeminloadertoggle = !jeminloadertoggle;
-        jeminloader.set_value(jeminloadertoggle);
-    }
-}
-
-bool jemintaketoggle = false;
-
-void jemintaket()
-{
-    // bool clamptoggle = false;
-    jemintaketoggle = !jemintaketoggle;
-    jemintake.set_value(jemintaketoggle);
-}
-
-bool jeminwingtoggle = false;
-
-void jeminwingt()
-{
-    // bool clamptoggle = false;
-    jeminwingtoggle = !jeminwingtoggle;
-    jeminwing.set_value(jeminwingtoggle);
-}
-
-bool jeminchoptoggle = false;
-
-void jeminchopt()
-{
-    // bool clamptoggle = false;
-    jeminchoptoggle = !jeminchoptoggle;
-    jeminchop.set_value(jeminchoptoggle);
-}
-
-bool jeminparktoggle = false;
-
-void jeminparkt()
-{
-    // bool clamptoggle = false;
-    jeminparktoggle = !jeminparktoggle;
-    jeminpark.set_value(jeminparktoggle);
-}
+}*/
 
 float wall_heading;
 
