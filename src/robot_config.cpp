@@ -15,16 +15,12 @@ pros::Motor clawintakem2(6, pros::E_MOTOR_GEAR_GREEN);
 
 
 pros::ADIDigitalOut jeminmech('A', false);
-pros::ADIDigitalOut jeminchop('E', false);
-pros::ADIDigitalOut jemintake('C', false);
-pros::ADIDigitalOut jeminloader('D', false);
-pros::ADIDigitalOut jeminwing('B', false);
-pros::ADIDigitalOut jeminpark('F', false);
+
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 pros::Motor front_left_motor(-3, pros::E_MOTOR_GEAR_BLUE);   // front left motor -13
-pros::Motor middle_left_motor(-2, pros::E_MOTOR_GEAR_GREEN); // middle left motorv -12
+pros::Motor middle_left_motor(-2, pros::E_MOTOR_GEAR_BLUE); // middle left motorv -12
 pros::Motor back_left_motor(-1, pros::E_MOTOR_GEAR_BLUE);    // back left motor -11
 pros::Motor front_right_motor(8, pros::E_MOTOR_GEAR_BLUE); // front right motor 9
 pros::Motor middle_right_motor(9, pros::E_MOTOR_GEAR_BLUE); // middle right motor 10
@@ -45,12 +41,12 @@ pros::MotorGroup right_motor_group({front_right_motor, middle_right_motor, back_
 
 pros::Imu imu(11);
 
-pros::Distance distance_sensor(19);
-pros::Distance frontdistance(11); // 1 is temporary
-pros::Distance middistance(18);
+pros::Distance distance_sensor(20);
+//pros::Distance frontdistance(11); // 1 is temporary
+//pros::Distance middistance(18);
 
-pros::Rotation horizontalEncoder(3);
-pros::Rotation verticalEncoder(4);
+pros::Rotation horizontalEncoder(17);
+pros::Rotation verticalEncoder(16);
 // vertical tracking wheel encoder
 //pros::ADIEncoder vertical_encoder('C', 'D', true);
 // horizontal tracking wheel

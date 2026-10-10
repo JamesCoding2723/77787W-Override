@@ -89,46 +89,9 @@ void autonomous()
 {   
     setintakespd(0);
 
-    //pidmove(10, 1, 1, 40);
+    //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
-    setarmtarget(300);
-
-    //pidTurnAbs(90, 1, 2);
-    
-    //pros::delay(3000);
-    
-    /*moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
-    //stop();
-    moveToPoint(10, 10, 5, 80, 1, 50, 5,1);
-    stop();
-    moveToPoint(0, 0, 5, 80, 1, 20, 5, 1, 90);
-    stop();
-    pidTurnAbs(0, 1, 3);*/
-
-
-
-    //auto_skills();
-
-    // Right_3_4();
-
-    //Left_3_4();
-
-    // right_7();
-
-    // left_7();
-
-    //Right_4ball();
-
-    //Left_4ball();
-
-    //SAWP();
-
-    //mid_SAWP();
-
-    //one inch
-    /*jemintaket();
-    moveForSec(30, true, 0.5);*/
-
+    front_right();
     
 }
 
@@ -172,10 +135,14 @@ void opcontrol()
         moveleft(leftY + 1 * rightX);
         moveright(leftY - 1 * rightX);
 
-
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+            jeminmechtoggle = !jeminmechtoggle;
+            jeminmech.set_value(jeminmechtoggle);
+        }
         
         armdriver(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1), master.get_digital(pros::E_CONTROLLER_DIGITAL_L2));
 
+       
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
         {
             setintakespd(-100);
@@ -188,6 +155,7 @@ void opcontrol()
         {
             setintakespd(0);
         }
+        
 
 
         pros::c::delay(25);

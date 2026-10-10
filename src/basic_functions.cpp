@@ -149,14 +149,14 @@ void moveForSec(float spd, bool dir, float secs)
     }
 }
 
-/*bool jeminmechtoggle = false;
+bool jeminmechtoggle = false;
 
 void jeminmecht()
 {
     // bool clamptoggle = false;
     jeminmechtoggle = !jeminmechtoggle;
     jeminmech.set_value(jeminmechtoggle);
-}*/
+}
 
 float wall_heading;
 

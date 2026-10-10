@@ -16,6 +16,8 @@ extern double dHorizontal;
 void odometry(void* param);
 //void odometry(void*);
 
+void setStartPose(double x, double y, double heading);
+
 
 void moveToPoint(double targetX, double targetY, double timeout, double max,
                   double E_TOL, double D_TOL, double _settle, float spdmod = 1,

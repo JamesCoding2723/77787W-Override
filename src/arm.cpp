@@ -2,11 +2,12 @@
 #include "main.h"
 #include "pros/screen.h"
 #include <cmath>
+#include "robot_config.h"
 
 //  CONFIG  (TUNE everything in this block)
 
-pros::Motor arm_motorL(4, pros::E_MOTOR_GEAR_RED);
-pros::Motor arm_motorR(-7, pros::E_MOTOR_GEAR_RED);
+pros::Motor arm_motorL(-4, pros::E_MOTOR_GEAR_RED);
+pros::Motor arm_motorR(7, pros::E_MOTOR_GEAR_RED);
 pros::ADIDigitalIn arm_limit('H');       // bottom limit switch
 
 static const bool  USE_LIMIT_SWITCH = false;   // false if you have no switch
@@ -15,8 +16,8 @@ static const float ARM_MAX = 100000000;             // lift arm by hand and read
 static const int   DRIVER_MV = 12000;         // driver power (lower = slower arm)
 
 // PID (same idea as a drive PID)
-static const float KP = 150.0;     // mV per degree of error
-static const float KI = 0.0;      // leave 0 until KP/KD are good
+static const float KP = 500.0;     // mV per degree of error
+static const float KI = 0.0;      // 0
 static const float KD = 130.0;    // damping (per 10 ms loop)
 static const float I_ZONE = 40;   // only build integral within this many degrees
 static const float I_MAX = 300;   // clamp on integral sum
@@ -91,7 +92,7 @@ void armtask()
 
             float out = KP * err + KI * integral + KD * derivative;
             if (out > 12000) out = 12000;
-            if (out < -12000) out = -12000;
+            if (out < -5000) out = -5000;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);
@@ -110,10 +111,12 @@ void armdriver(bool up, bool down)
     float pos = armpos();
     int power = 0;
     if (up && !down) power = DRIVER_MV;
-    else if (down && !up) power = -DRIVER_MV;
+    else if (down && !up) {
+        power = -3000;
+    }
 
     //if (power > 0 && pos >= ARM_MAX) power = 0;
-    //if (power < 0 && (pos <= ARM_MIN )) power = 0;
+    if (power < 0 && (pos <= ARM_MIN )) power = 0;
 
     if (power == 0)
         armbrake(); // holds position
@@ -150,14 +153,14 @@ void armstop()
     armbrake();
 }
 
-/*void clawgrip()
+void clawgrip()
 {
-    arm_claw.set_value(!CLAW_RELEASE);
+    jeminmech.set_value(true);
 }
  
 void clawrelease()
 {
-    arm_claw.set_value(CLAW_RELEASE);
+    jeminmech.set_value(false);
 }
  
 // Sends the arm to zero and releases the claw delayms after the arm STARTS going down,
@@ -172,5 +175,5 @@ bool armscore(int delayms, int timeoutms)
     int remaining = timeoutms - delayms;
     if (remaining < 0) remaining = 0;
     return armwait(remaining);
-}*/
+}
  

@@ -32,7 +32,7 @@ lastVertical = 0.0;
 lastHorizontal = 0.0;
 lastHeading = imu.get_heading();
 
-pros::delay(2000);
+pros::delay(2400);
 
 
 posX = 0.0;
@@ -120,6 +120,19 @@ pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %f, Horizontal: %f",pos
 pros::delay(10);
     }
 }
+
+void setStartPose(double x, double y, double heading) {
+    imu.set_heading(heading);
+
+    posX = x;
+    posY = y;
+    posHeading = heading;
+
+    lastVertical = -verticalEncoder.get_position() * (M_PI * 2 / 360.0) / 100.0;
+    lastHorizontal = horizontalEncoder.get_position() * (M_PI * 2 / 360.0) / 100.0;
+    lastHeading = heading;
+}
+
 
 double angleRange(double angle) {
 
