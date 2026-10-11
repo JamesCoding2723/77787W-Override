@@ -91,6 +91,10 @@ void autonomous()
 
     //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
+
+    //pros::delay(2000);
+    //pidGyro(24, 0, 2, 70, 1, 25, 15);
+
     front_right();
     
 }

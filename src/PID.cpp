@@ -287,7 +287,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
 
 
     //drive PID
-    double kP_drive = 5.0;
+    double kP_drive = 6.0;
     double kI_drive = 0.0;
     double kD_drive = 0.2;
     double driveS_error;
@@ -306,7 +306,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
     while (true) {
         repeat++;
         //Drive PID
-        driveError = targetInches - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.02127120025);
+        driveError = targetInches - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.02836160034);
         float driveP = driveError * kP_drive;
         float driveD = (driveError - drivePrevError) * kD_drive;
         driveS_error += driveError;              // 1
@@ -382,7 +382,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
           break;
         }
 
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, repeat++, "pid: %f, %f, %f, %f", leftPower, rightPower, driveError, turnError);        
+        pros::c::screen_print(pros::E_TEXT_MEDIUM, 9, "pid: %f, %f, %f, %f", leftPower, front_right_motor.get_position(), driveError, turnError);        
 
         pros::delay(20);
     }

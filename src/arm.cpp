@@ -92,7 +92,7 @@ void armtask()
 
             float out = KP * err + KI * integral + KD * derivative;
             if (out > 12000) out = 12000;
-            if (out < -5000) out = -5000;
+            if (out < -6000) out = -6000;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);
@@ -112,7 +112,7 @@ void armdriver(bool up, bool down)
     int power = 0;
     if (up && !down) power = DRIVER_MV;
     else if (down && !up) {
-        power = -3000;
+        power = -5000;
     }
 
     //if (power > 0 && pos >= ARM_MAX) power = 0;

@@ -23,6 +23,7 @@ void front_right()
     moveForSec(70, true, 0.35);
     moveForSec(-70, true, 0.435);
     pros::delay(200);
+    pidTurnAbs(90, 3, 0.7);
     moveToPoint(23, 24, 2, 70, 10, 70, 1.0, 1, 15);
     moveForSec(50, true, 0.3);
     jeminmecht();
@@ -33,9 +34,9 @@ void front_right()
     //stop();
     pidmove(13, 1, 30, 30, 1, 30);
     jeminmecht();
-    pros::delay(200);
     
     setarmtarget(160);
+    pros::delay(200);
     moveToPoint(26, 24, 2, 70, 10, 70, 1.0, 1, 15);
     moveForSec(70, true, 0.1);
 
@@ -48,7 +49,7 @@ void front_right()
 
     moveForSec(-70, true, 0.2);
     setintakespd(-100);
-    moveToPoint(58, 20, 2, 70, 19, 70, 1.0, 1, 15);
+    moveToPoint(54, 23, 2, 70, 19, 70, 1.0, 1, 15);
     pidmove(12,2,30,30);
     jeminmecht();
     pros::delay(200);
