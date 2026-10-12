@@ -306,7 +306,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
     while (true) {
         repeat++;
         //Drive PID
-        driveError = targetInches - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.02836160034);
+        driveError = targetInches - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.01702); //TEST CONVERSION
         float driveP = driveError * kP_drive;
         float driveD = (driveError - drivePrevError) * kD_drive;
         driveS_error += driveError;              // 1
