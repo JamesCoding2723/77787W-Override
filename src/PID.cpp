@@ -302,7 +302,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
     double turnError, turnPrevError;
 
     double settleTime;
-    int repeat;
+    int repeat = 0;
     while (true) {
         repeat++;
         //Drive PID
@@ -362,7 +362,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
         moveright(rightPower);
 
         //exit
-        if (fabs(driveError) < D_TOL && fabs(turnError) < 2 && (leftPower + rightPower)/2 < E_TOL)
+        if (fabs(driveError) < E_TOL && fabs(turnError) < 4 && (leftPower + rightPower)/2 < D_TOL)
             settleTime += 1;
         else
             settleTime = 0;
@@ -378,7 +378,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
 
         if (settleTime > _settle)
         {
-          stop();
+          
           break;
         }
 
@@ -697,7 +697,7 @@ void pidmove(float target_inch, float settletime_TOL, float timeout, float max, 
 
   while (true)
   {
-    float error = target_inch - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.02127120025);
+    float error = target_inch - (((front_right_motor.get_position() + front_left_motor.get_position()) / 2) * 0.01702);
     float P = error * kp;
     float D = (error - lastError) * kd;
     s_error += error;

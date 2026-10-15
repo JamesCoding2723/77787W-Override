@@ -15,51 +15,71 @@ void auto_skills()
 
 void front_right()
 {
-    setStartPose(0, 13, 180);
-    //jeminmecht();
+    //setStartPose(0, 13, 180);
+    imu.set_heading(180);
+    jeminmecht();
+    setarmtarget(90);
     moveForSec(-70, true, 0.12);
     moveForSec(70, true, 0.35);
     moveForSec(-70, true, 0.2);
     moveForSec(70, true, 0.35);
-    moveForSec(-70, true, 0.435);
+    //setintakespd(-50);
+    pidmove(-15, 1, 3, 100, 1,100);
+    setintakespd(0);
     pros::delay(200);
     pidTurnAbs(90, 3, 0.7);
-    moveToPoint(23, 24, 2, 70, 10, 70, 1.0, 1, 15);
-    moveForSec(50, true, 0.3);
-    jeminmecht();
-    moveForSec(70, true, 0.3);
-    moveForSec(-60, true, 0.43);
+    pidGyro(17, 90, 1, 70, 2, 100, 1, 15);
+    moveForSec(40, true, 0.25);
+    setintakespd(-50);
+    setarmtarget(0);
+    moveForSec(70, true, 0.2);
+    setintakespd(100);
+    moveForSec(70, true, 0.1);
+    pidmove(-12, 3, 1);
     setintakespd(-100);
-    moveToPoint(28, 63, 5, 80, 30, 100, 1.0, 1, 15);
+    //setintakespd(-100);
+    //moveToPoint(13, 40, 5, 80, 1, 100, 1.0, 1, 15);
     //stop();
-    pidmove(13, 1, 30, 30, 1, 30);
-    jeminmecht();
+    //pros::delay(2000);
+    pidGyro(23, 48, 1, 70, 2.5, 100, 2, 15);
+    moveForSec(25, true, 0.35);
+
+    setintakespd(-100);
     
     setarmtarget(160);
-    pros::delay(200);
-    moveToPoint(26, 24, 2, 70, 10, 70, 1.0, 1, 15);
-    moveForSec(70, true, 0.1);
-
+    //pros::delay(200);
     setintakespd(0);
-    setarmtarget(0);
-    pros::delay(500);
-    jeminmecht();
-
-
-
-    moveForSec(-70, true, 0.2);
-    setintakespd(-100);
-    moveToPoint(58, 20, 2, 70, 19, 70, 1.0, 1, 15);
-    pidmove(12,2,30,30);
-    jeminmecht();
-    pros::delay(200);
-    setarmtarget(220);
-    moveToPoint(26, 24, 2, 70, 10, 70, 1.0, 1, 15);
+    pidGyro(12, 165, 1.5, 70, 2, 100, 1, 15);
     moveForSec(70, true, 0.2);
-    setarmtarget(100);
+
+
+    setarmtarget(0);
+    moveForSec(80, true, 0.2);
+    pidmove(-12, 2, 1);
+    setintakespd(-100);
+    pidGyro(24, 130, 2, 70, 2, 50, 1, 15);
+    moveForSec(25, true, 0.35);
+    moveForSec(50, true, 0.1);
+    pros::delay(200);
+    setarmtarget(235);
     setintakespd(0);
+    pidGyro(20, 255, 1.1, 100, 2, 100, 1, 15);
+    moveForSec(80, true, 0.1);
+    setarmtarget(00);
+    moveForSec(80, true, 0.3);
+    pidmove(-8, 1, 2);
+
+    setintakespd(-100);
+    pidGyro(23, 215, 1.3, 100, 1, 100, 1, 15);
+    moveForSec(35, true, 0.25);
+    setintakespd(0);
+    setarmtarget(330);
+    pidmove(-22, 2, 3);
+    //setarmtarget(330);
+    pidGyro(20, 220, 1.1, 100, 2, 100, 1, 15);
+    moveForSec(70, true, 0.2);
+    setarmtarget(00);
     pros::delay(300);
-    jeminmecht();
-    moveForSec(-70, true, 0.2);
-   // moveForSec(60, true, 0.2);
+    pidmove(-8, 1, 2);
+
 }

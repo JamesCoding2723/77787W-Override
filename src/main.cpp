@@ -93,7 +93,8 @@ void autonomous()
 
 
     //pros::delay(2000);
-    //pidGyro(24, 0, 2, 70, 1, 25, 15);
+
+    //pidGyro(24, 90, 2, 70, 1, 25, 15, 100000000);
 
     front_right();
     
