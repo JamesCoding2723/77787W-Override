@@ -289,11 +289,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/auton.cpp.o",
-            "src/auton.cpp"
+            "bin/PID.cpp.o",
+            "src/PID.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/auton.cpp"
+        "file": "src/PID.cpp"
     },
     {
         "arguments": [
@@ -326,10 +326,10 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/PID.cpp.o",
-            "src/PID.cpp"
+            "bin/auton.cpp.o",
+            "src/auton.cpp"
         ],
         "directory": "/Users/evanlu/Documents/GitHub/77787W-Override",
-        "file": "src/PID.cpp"
+        "file": "src/auton.cpp"
     }
 ]

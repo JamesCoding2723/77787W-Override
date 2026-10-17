@@ -34,9 +34,9 @@ void initialize()
     imu.set_data_rate(5);
     // print position to brain screen
 
-    while (imu.is_calibrating()) {
+    /*while (imu.is_calibrating()) {
     pros::delay(10);
-    }
+    }*/
 
     /*front_left_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     middle_left_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
@@ -50,11 +50,14 @@ void initialize()
 
 
     pros::Task Walltask(imu_display_task);
-    pros::Task odomTask(odometry);
+    //pros::Task odomTask(odometry);
     pros::Task Armtask(armtask);
     pros::Task Intake(intake);
 
     //pros::Task mmidscore(midscore);
+
+
+
 
     //pros::Task Lowgoal(lowscore);
     top_color_sensor.set_led_pwm(100);
@@ -92,11 +95,15 @@ void autonomous()
     //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
 
+
+    //setarmtarget(90);
+
     //pros::delay(2000);
 
-    //pidGyro(24, 90, 2, 70, 1, 25, 15, 100000000);
 
-    front_right();
+    front_right_5pin();
+
+    //right_twostack_4pin();  //Secretly a 5 pin
     
 }
 
@@ -127,7 +134,9 @@ void opcontrol()
 
     const float Joystick_LowerDeadzone = 7;
 
-   
+    arm_motorL.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    arm_motorR.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
     while (true)
     {
         
@@ -144,8 +153,13 @@ void opcontrol()
             jeminmechtoggle = !jeminmechtoggle;
             jeminmech.set_value(jeminmechtoggle);
         }
+
+        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+            jeminbacktoggle = !jeminbacktoggle;
+            jeminback.set_value(jeminbacktoggle);
+        }
         
-        armdriver(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1), master.get_digital(pros::E_CONTROLLER_DIGITAL_L2));
+        armdriver(master.get_digital(pros:: E_CONTROLLER_DIGITAL_L1), master.get_digital(pros::E_CONTROLLER_DIGITAL_L2));
 
        
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))

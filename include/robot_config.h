@@ -11,6 +11,7 @@ extern pros::Motor clawintakem1;
 extern pros::Motor clawintakem2;
 
 extern pros::ADIDigitalOut jeminmech;
+extern pros::ADIDigitalOut jeminback;
 
 extern pros::Controller master;
 

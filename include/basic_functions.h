@@ -35,6 +35,10 @@ extern bool jeminmechtoggle;
 
 void jeminmecht();
 
+extern bool jeminbacktoggle;
+
+void jeminbackt();
+
 void moveforward(float, bool, float);
 
 void wait(float);

@@ -78,39 +78,37 @@ void pidTurnRel(float target, float rotate_tolocal, float timeout, float max)
   float pTol = rotate_tolocal;
   float dTol = rotate_tolocal;
   float lastError;
-  float kp = 1.45;      // for new robot
-  float kd = 7.0;      // for new robot
-  float ki = 0.0;     // for new roobot
+  float error;
+  float kp = 1.8;      // for new robot
+  float kd = 7.5;      // for new robot
+  float ki = 0.0;     // for new robot
   //float spd_ratio = 2; // 0.5
   float s_error = 0;
   int n = 0;
   int repeat = 0;
-  int line_number = 1;
-  //imu.set_rotation(0);
-  target += imu.get_rotation();
-
+  int settletime = 0;
   while (true)
   {
+    double currentHeading = 0; 
+    double error = target - currentHeading;
 
-    float error = target - imu.get_rotation();
+    // Handle wraparound
+    if (error > 180) error -= 360;
+    if (error < -180) error += 360;
+
     float P = error * kp;
     float D = (error - lastError) * kd;
     s_error += error;              // 1
     s_error = fmin(s_error, 100);  // 2
     s_error = fmax(s_error, -100); // 2
+    // Brain.Screen.printAt(10,10,"inertial=%f,error=%f,P+D+I=%f",sensor.rotation(deg),error,P+D);//1031
     if (error * lastError < 0)
       s_error = 0; // 3
     float I = ki * s_error;
     // if (error != 0) break; //delete later
 
-    if (fabs(error) < pTol)
-    {
-      stop();
-      pros::c::screen_print(pros::E_TEXT_MEDIUM, line_number++, "error: %f", imu.get_rotation());
-      break;
-    }
 
-    if (repeat > 100 * timeout)
+    if (repeat > timeout*100)
     {
       stop();
       break;
@@ -118,17 +116,30 @@ void pidTurnRel(float target, float rotate_tolocal, float timeout, float max)
 
     float pidspd = (P + D + I);
 
-    if (std::abs(pidspd) < 23)
-      pidspd = sign(pidspd) * 23;
+   // if (std::abs(pidspd) < 15)
+   //   pidspd = sign(pidspd) * 15;
+
+
+    if (fabs(error) < pTol && fabs(pidspd) < 30)
+    {
+      settletime ++;
+    }
+
+    if (settletime > 15)
+      {
+        stop();
+        break;
+    }
+
 
     turn(std::clamp(pidspd, -max, max));
-    std::cout << pidspd << std::endl;
-    pros::c::screen_print(pros::E_TEXT_MEDIUM, n++, "pid: %f, %f, %f", (P+D+I), imu.get_rotation(), error);
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 9, "pid: %f, %f, %f", pidspd, settletime, error);
     repeat++;
 
     lastError = error;
     pros::c::delay(10);
   }
+  stop();
 }
 
 
@@ -192,7 +203,7 @@ void pidTurnAbs(float target, float rotate_tolocal, float timeout, float max)
 
 
     turn(std::clamp(pidspd, -max, max));
-    pros::c::screen_print(pros::E_TEXT_MEDIUM, 4, "pid: %f, %f, %f", pidspd, settletime, error);
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 9, "pid: %f, %f, %f", pidspd, settletime, error);
     repeat++;
 
     lastError = error;
@@ -372,7 +383,7 @@ void pidGyro(double targetInches, double targetHeading, double timeout, double m
 
         if (repeat > timeout * 50)
         {
-          stop();
+          //stop();
           break;
         }
 

@@ -15,6 +15,7 @@ pros::Motor clawintakem2(6, pros::E_MOTOR_GEAR_GREEN);
 
 
 pros::ADIDigitalOut jeminmech('A', false);
+pros::ADIDigitalOut jeminback('B', false);
 
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);

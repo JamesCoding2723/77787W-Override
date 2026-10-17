@@ -21,7 +21,7 @@ static const float KI = 0.0;      // 0
 static const float KD = 130.0;    // damping (per 10 ms loop)
 static const float I_ZONE = 40;   // only build integral within this many degrees
 static const float I_MAX = 300;   // clamp on integral sum
-static const float DONE_TOL = 4;  // "arrived" tolerance in degrees
+static const float DONE_TOL = 2;  // "arrived" tolerance in degrees
 
 
 //  STATE (shared between opcontrol/autonomous and the PID task)
@@ -91,7 +91,7 @@ void armtask()
             prevErr = err;
 
             float out = KP * err + KI * integral + KD * derivative;
-            if (out > 12000) out = 12000;
+            if (out > 13000) out = 13000;
             if (out < -6000) out = -6000;
             armvolt((int)out);
 
