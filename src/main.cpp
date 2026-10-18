@@ -101,9 +101,11 @@ void autonomous()
     //pros::delay(2000);
 
 
-    front_right_5pin();
+    //front_right_5pin();
 
-    //right_twostack_4pin();  //Secretly a 5 pin
+    right_twostack_4pin();  //Secretly a 5 pin
+
+    //auto_skills();
     
 }
 
@@ -122,6 +124,7 @@ void autonomous()
  */
 void opcontrol()
 {
+    //imu.set_heading(180);
     setintakespd(0);
 
 
@@ -175,6 +178,33 @@ void opcontrol()
             setintakespd(0);
         }
         
+
+       /* if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+            imu.set_heading(180);
+            jeminmecht();
+            moveForSec(-70, true, 0.12);
+            moveForSec(70, true, 0.35);
+            moveForSec(-70, true, 0.2);
+            moveForSec(70, true, 0.35);
+            //setintakespd(-50);
+            pidmove(-15, 1, 3, 100, 1,100);
+            setintakespd(0);
+            pros::delay(200);
+            turn(-60);
+            pros::delay(50);
+            setarmtarget(96);
+            pidTurnAbs(90, 3, 0.7);
+            setintakespd(-100);
+            pidGyro(17, 90, 1, 70, 2, 100, 1, 15);
+            moveForSec(40, true, 0.25);
+            setintakespd(-100);
+            setarmtarget(0);
+            moveForSec(70, true, 0.2);
+            moveForSec(40, false, 0.1);
+            setintakespd(100);
+
+            pidmove(-12, 1, 1);
+        }*/
 
 
         pros::c::delay(25);
