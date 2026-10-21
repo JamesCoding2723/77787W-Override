@@ -94,16 +94,15 @@ void autonomous()
 
     //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
-
+    auto_skills();
 
     //setarmtarget(90);
 
     //pros::delay(2000);
 
-
     //front_right_5pin();
 
-    right_twostack_4pin();  //Secretly a 5 pin
+    //right_twostack_4pin();  //Secretly a 5 pin
 
     //auto_skills();
     
@@ -124,6 +123,7 @@ void autonomous()
  */
 void opcontrol()
 {
+    
     //imu.set_heading(180);
     setintakespd(0);
 

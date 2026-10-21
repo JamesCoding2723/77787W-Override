@@ -175,7 +175,7 @@ void setwall_heading(float _input)
     wall_heading = _input;
 }
 
-float d0 = 6.5;
+float d0 = 8.5;
 double wallpos;
 
 double getwallpos(float wall_heading)
@@ -230,16 +230,9 @@ float rad2deg(float _input)
 
 void imu_display_task(void*) {
   while (true) {
-    //pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
-    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "X: %f, Y: %f, H: %f", posX, posY, posHeading);
-    /*pros::c::screen_print(pros::E_TEXT_MEDIUM, 3, "Vertical: %d, Horizontal: %d",localX, localY);
-    pros::c::screen_print(
-    pros::E_TEXT_MEDIUM,
-    4,
-    "dV: %.6f dH: %.6f",
-    dVertical,
-    dHorizontal
-);*/
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 1, "wallpos: %f, %f", wallpos, frontwallpos);
+    pros::c::screen_print(pros::E_TEXT_MEDIUM, 2, "X: %f, Y: %f, H: %f", posX, posY, imu.get_heading());
+
     pros::delay(100);   // update ~10 times per second
   }
 }

@@ -408,8 +408,8 @@ void pidWallMove(float target_inch, float tolerence_inch, float _wall, float tim
   // float target = target_inch
   // float tolerence = InchToEncoderunit(tolerence_inch);
   float lastError;
-  float kp = 5.0; // for new robot
-  float kd = 0.2; // for new robot
+  float kp = 6.0; // for new robot
+  float kd = 0.3; // for new robot
   float ki = 0.0; // for new roobot
   float s_error = 0;
   int line_number = 1;
