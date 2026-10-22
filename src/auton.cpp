@@ -10,53 +10,91 @@
 #include "odom.h"
 
 
+void left_goal_loader(int _arm_deg){
+    pidwallGyro(15, 87, 270, 2, 70, 0.5);
+    setintakespd(0);
+    setarmtarget(0);
+    pros::delay(100);
+    pidTurnAbs(180, 10, 1);
+    setintakespd(-100);
+    pidGyro(14, 180, 1, 60, 1, 40, 1);
+    moveForSec(35, true, 0.14);
+
+    pidGyro(-13, 180, 1, 60, 1, 40, 1);
+    setarmtarget(_arm_deg);
+    pidTurnAbs(90, 10, 1);
+    pidGyro(22, 90, 1, 70, 2, 100, 1, 15);
+    moveForSec(40, true, 0.3);
+    setintakespd(0);
+    setarmtarget(0);
+    moveForSec(70, true, 0.2);
+    moveForSec(40, false, 0.1);
+}
+
 void auto_skills()
 {
     imu.set_heading(0);
     jeminmecht();
-    setarmtarget(120);
-    pidGyro(15, 0, 1, 100, 2, 25, 1, 100000);
+    setarmtarget(110);
+    pidGyro(16, 0, 1, 100, 2, 25, 1, 100000);
     pidTurnAbs(90, 10, 1);
-    pidGyro(12, 90, 1, 100, 2, 25, 1, 100000);
+    pidGyro(11, 90, 1, 100, 2, 25, 1, 100000);
     moveForSec(40, true, 0.2);
-    setintakespd(-100);
+    //setintakespd(-100);
     //moveForSec(30, false, 0.1);
-    setarmtarget(90);
+    setarmtarget(65);
     //setintakespd(100);
-    pros::delay(300);
+    pros::delay(200);
     //moveForSec(70, true, 0.2);
     //moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    pros::delay(1000);
+    left_goal_loader(220); //2
+
+    left_goal_loader(270); //3
+
+    left_goal_loader(320); //4
+
+    left_goal_loader(400); //5
+
     setarmtarget(0);
-    setintakespd(0);
-    //pidGyro(-20, 90, 1, 100, 1, 100, 1, 100000000, 1.4, 4);
-    pidwallGyro(15, 90, 270, 1, 70);
+    pidwallGyro(16, 90, 270, 2, 70, 0.5);
+    pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(13, 180, 1, 60, 1, 40, 1);
-    pros::delay(300);
+    pidGyro(12.3, 180, 1, 60, 1, 40, 1);
+    moveForSec(35, true, 0.14);
 
-    pidGyro(-13, 180, 1, 60, 1, 40, 1);
-    setarmtarget(234);
-    pidTurnAbs(90, 10, 1);
-    pidGyro(19, 90, 1, 70, 2, 100, 1, 15);
-    moveForSec(40, true, 0.25);
+    moveForSec(-30, true, 0.2);
+    //pros::delay(100);
+    setintakespd(0);
+    setarmtarget(10);
+
+    pidTurnAbs(100, 10, 1);
+    pidGyro(60, 90, 5, 70, 1, 100, 1, 1000000);
+    pidTurnAbs(180, 10, 1);
+    moveForSec(60, true, 0.3);
+    moveForSec(50, false, 0.2);
+    moveForSec(60, true, 0.3);
+
+    moveForSec(-30, true, 0.35);
+    setarmtarget(96);
+    pros::delay(100);
+
+
+    pidGyro(19, 70, 1, 80, 1, 25, 1);
     setintakespd(-100);
+    moveForSec(40, true, 0.2);
+    setintakespd(-100);
+    moveForSec(30, false, 0.1);
     setarmtarget(0);
     moveForSec(70, true, 0.2);
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    pidwallGyro(14, 90, 270, 1);
+    pidmove(-12, 1, 1);
     setintakespd(0);
-    pidTurnAbs(180, 10, 1);
-    setintakespd(-100);
-    pidGyro(13, 180, 1, 60, 1, 40, 1);
-    pros::delay(300);
 
-    stop();
 }
 
 void front_right_5pin() //TIME

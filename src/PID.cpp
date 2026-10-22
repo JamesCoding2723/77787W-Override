@@ -474,9 +474,9 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
 
 
     //drive PID
-    double kP_drive = 5.0;
+    double kP_drive = 6.0;
     double kI_drive = 0.0;
-    double kD_drive = 0.2;
+    double kD_drive = 0.3;
     double driveS_error;
 
     //turn PID
