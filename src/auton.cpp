@@ -39,7 +39,7 @@ void right_goal_loader_close(int _arm_deg){
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
     pidGyro(12, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.14);
+    moveForSec(35, true, 0.12);
 
     pidGyro(-13, 180, 1, 60, 1, 40, 1);
     setarmtarget(_arm_deg);
@@ -80,7 +80,7 @@ void right_goal_loader_far(int _arm_deg){
 
 void auto_skills_108()
 {
-    /*imu.set_heading(180);
+    imu.set_heading(180);
     jeminmecht();
     moveForSec(-70, true, 0.12);
     moveForSec(70, true, 0.35);
@@ -194,73 +194,15 @@ void auto_skills_108()
 
     moveForSec(-30, true, 0.35);
 
-    pidmove(-48, 1, 5);*/
+    pidmove(-48, 1, 5);
 }  
 
 void auto_skills_118() //OLD PATH
 {
-   imu.set_heading(180);
-    jeminmecht();
-    moveForSec(-70, true, 0.12);
-    moveForSec(70, true, 0.35);
-    moveForSec(-70, true, 0.2);
-    moveForSec(70, true, 0.35);
-    //setintakespd(-50);
-    pidmove(-15, 1, 3, 100, 1,100);
-    setintakespd(0);
-    pros::delay(200);
-    turn(-60);
-    pros::delay(50);
-    setarmtarget(96);
-    pidTurnAbs(90, 3, 0.7);
-    setintakespd(-100);
-    pidGyro(17, 90, 1, 70, 2, 100, 1, 15);
-    moveForSec(40, true, 0.25);
-    setintakespd(-100);
-    setarmtarget(0);
-    moveForSec(70, true, 0.2);
-    moveForSec(40, false, 0.1);
-    setintakespd(100);
-
-    pidmove(-14, 0.5, 1);
-    pros::delay(200);
-    setintakespd(-100);
-    //setintakespd(-100);
-    //moveToPoint(13, 40, 5, 80, 1, 100, 1.0, 1, 15);
-    //stop();
-    //pros::delay(2000);
-    pidGyro(23, 43.5, 2, 70, 2.5, 100, 2, 15);
-    moveForSec(25, true, 0.3);
-    setarmtarget(40);
-    moveForSec(40, true, 0.41);
-
-    setintakespd(-100);
-    
-    setarmtarget(164);
-    //pros::delay(200);
-    
-    pidGyro(18, 180, 1.1, 70, 2, 100, 1, 15);
-    setintakespd(0);
-    moveForSec(30, true, 0.2);
-
-
-    setarmtarget(0);
-    moveForSec(35, true, 0.2);
-    pidmove(-14, 1, 1);
-
-    pros::delay(400);
-    setintakespd(-100);
-    pidGyro(24, 135, 2, 70, 2, 50, 1, 15);
-    moveForSec(25, true, 0.35);
-    setarmtarget(40);
-    moveForSec(45, true, 0.4);
-    setarmtarget(239);
-    pros::delay(200);
-    setintakespd(0);
-    pidGyro(21, 265, 1.1, 100, 2, 100, 1, 15);
     imu.set_heading(180);
     jeminmecht();
-    /*moveForSec(-70, true, 0.12);
+
+    moveForSec(-70, true, 0.12);
     moveForSec(70, true, 0.35);
     moveForSec(-70, true, 0.2);
     moveForSec(70, true, 0.35);
@@ -332,8 +274,8 @@ void auto_skills_118() //OLD PATH
     pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(14, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.4);
+    pidGyro(12, 180, 1, 60, 1, 40, 1);
+    moveForSec(35, true, 0.14);
 
     pidGyro(-13, 180, 1, 60, 1, 40, 1);
     setarmtarget(90);
@@ -365,11 +307,10 @@ void auto_skills_118() //OLD PATH
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
     pidGyro(19.3, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.14);*/
+    moveForSec(35, true, 0.14);
 
     
-    /*pidGyro(-65, -183, 2, 80, 2, 100, 1, 15);
-    pros::delay(2000);
+    pidGyro(-60, -182, 2, 90, 2, 100, 1, 15);
     pidTurnAbs(90, 10, 0.8);
     moveForSec(60, true, 0.3);
     moveForSec(50, false, 0.2);
@@ -378,10 +319,11 @@ void auto_skills_118() //OLD PATH
     moveForSec(-30, true, 0.35);
 
     pidTurnAbs(130, 10, 0.8);
-    setarmtarget(140);
-    pidGyro(-48, 90, 1, 70, 2, 100, 1, 1000000);
+    setarmtarget(165);
+    pidGyro(-40, 90, 2, 70, 2, 100, 1, 1000000);
 
-    pidGyro(12, 225, 1.1, 70, 2, 100, 1, 15);
+    pidGyro(15, 225, 1.1, 70, 2, 100, 1, 15);
+    setintakespd(-100);
     moveForSec(40, true, 0.25);
     setintakespd(-100);
     setarmtarget(0);
@@ -390,7 +332,21 @@ void auto_skills_118() //OLD PATH
     setintakespd(100);
 
     pidmove(-14, 1, 1);
-    setintakespd(0);*/
+    setintakespd(-100);
+
+    pidGyro(31.5, 277, 1.1, 70, 2, 100, 1, 15);
+    moveForSec(25, true, 0.35);
+
+    setarmtarget(240);
+
+    pidGyro(25, 145, 1.1, 100, 2, 100, 1, 15);
+    moveForSec(40, true, 0.2);
+    setarmtarget(00);
+    moveForSec(30, true, 0.3);
+
+    pidmove(-8, 1, 1);
+
+
 
 }
 

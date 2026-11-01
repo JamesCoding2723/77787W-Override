@@ -92,7 +92,6 @@ void autonomous()
 {   
     setintakespd(0);
 
-    //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
     //auto_skills_108();
 
