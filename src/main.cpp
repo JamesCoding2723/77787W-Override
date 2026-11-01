@@ -94,7 +94,9 @@ void autonomous()
 
     //moveToPoint(24, 24, 5, 80, 1, 20, 3, 1, 80);
 
-    auto_skills();
+    //auto_skills_108();
+
+    auto_skills_118();
 
     //setarmtarget(90);
 
@@ -142,7 +144,7 @@ void opcontrol()
 
     while (true)
     {
-        
+        //getwallpos(90);
 
         // get left y and right x positions
         int rightX = abs(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) < Joystick_LowerDeadzone ? 0: master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);

@@ -19,6 +19,8 @@ void moveright(float);
 
 void move(float);
 
+void moverightleft(float, float);
+
 double motorpos();
 
 void resetmotorpos();

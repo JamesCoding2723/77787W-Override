@@ -74,6 +74,16 @@ void move(float spd)
     moveleft(spd);
 }
 
+void moverightleft(float spdright, float spdleft)
+{
+    if (fabs(spdright) > 100)
+        spdright = sign(spdright) * 100;
+    if (fabs(spdleft) > 100)
+        spdleft = sign(spdleft) * 100;
+    moveright(spdright);
+    moveleft(spdleft);
+}
+
 void turn(float spd)
 {
     if (fabs(spd) > 100)
