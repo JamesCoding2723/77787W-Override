@@ -488,8 +488,12 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
     double driveError, drivePrevError;
     double turnError, turnPrevError;
 
-    double settleTime;
-    int repeat;
+    double MIN_DRIVE = 12;   // NEW: tune this
+    double MIN_TURN  = 6;    // NEW: tune this (set to 0 to disable)
+
+
+    double settleTime = 0;
+    int repeat = 0;
     while (true) {
         repeat++;
         //Drive PID
@@ -523,6 +527,11 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
         float turnI = kI_turn * turnS_error;
 
         double turnOutput = turnP + turnI + turnD;
+
+        if (fabs(driveError) > E_TOL && fabs(driveOutput) < MIN_DRIVE)
+            driveOutput = copysign(MIN_DRIVE, driveOutput);
+        if (fabs(turnError) > 2 && fabs(turnOutput) < MIN_TURN)
+            turnOutput = copysign(MIN_TURN, turnOutput);
 
         //outputs-----------------------------------------
         double turnScale = 1.0 - std::min(fabs(turnError) / 20.0, 1.0);

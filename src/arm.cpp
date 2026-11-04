@@ -92,7 +92,7 @@ void armtask()
 
             float out = KP * err + KI * integral + KD * derivative;
             if (out > 13000) out = 13000;
-            if (out < -5000) out = -5000;
+            if (out < -6000) out = -6000;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);
