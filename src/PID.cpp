@@ -556,7 +556,7 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
         moveright(rightPower);
 
         //exit
-        if (fabs(driveError) < E_TOL && fabs(turnError) < 2 && (leftPower + rightPower)/2 < 25)
+        if (fabs(driveError) < E_TOL && fabs(turnError) < 2 && (leftPower + rightPower)/2 < 40)
             settleTime += 1;
         else
             settleTime = 0;
@@ -570,13 +570,13 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
           break;
         }
 
-        if (settleTime > 10)
+        if (settleTime > 2)
         {
           stop();
           break;
         }
 
-        pros::c::screen_print(pros::E_TEXT_MEDIUM, repeat++, "pid: %f, %f, %f, %f", leftPower, rightPower, driveError, turnError);        
+        //pros::c::screen_print(pros::E_TEXT_MEDIUM, repeat++, "pid: %f, %f, %f, %f", leftPower, rightPower, driveError, turnError);        
 
         pros::delay(20);
     }
