@@ -33,15 +33,15 @@ void left_goal_loader(int _arm_deg){
 
 void right_goal_loader_close(int _arm_deg){
     pidwallGyro(15, 273, 90, 2, 70, 1);
-    setintakespd(0);
+    setintakespd(-100);
     setarmtarget(0);
     //pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(11, 180, 1, 60, 1, 40, 1);
+    pidGyro(10.5, 180, 1, 60, 1, 40, 1);
     moveForSec(35, true, 0.12);
 
-    pidGyro(-12, 180, 1, 80, 1, 40, 1);
+    pidGyro(-10, 180, 1, 80, 1, 40, 1);
     setarmtarget(_arm_deg);
     pidTurnAbs(270, 10, 1);
     pidGyro(22, 270, 1, 80, 2, 100, 1, 15);
@@ -49,8 +49,9 @@ void right_goal_loader_close(int _arm_deg){
     setintakespd(0);
     setarmtarget(0);
     moveForSec(70, true, 0.2);
+    setintakespd(40);
     moveForSec(40, false, 0.1);
-    //setintakespd(100);
+    setintakespd(0);
 }
 
 void right_goal_loader_far(int _arm_deg){
@@ -74,8 +75,9 @@ void right_goal_loader_far(int _arm_deg){
     setintakespd(0);
     setarmtarget(0);
     moveForSec(70, true, 0.2);
+    setintakespd(50);
     moveForSec(40, false, 0.1);
-    //setintakespd(100);
+    setintakespd(0);
 }
 
 void auto_skills_108()
@@ -201,6 +203,7 @@ void auto_skills_118()
 {
     imu.set_heading(180);
     jeminmecht();
+    setarmtarget(50);
     moveForSec(-70, true, 0.12);
     moveForSec(70, true, 0.35);
     moveForSec(-70, true, 0.2);
@@ -213,7 +216,6 @@ void auto_skills_118()
     pros::delay(50);
     setarmtarget(96);
     pidTurnAbs(90, 3, 0.7);
-    setintakespd(-100);
     pidGyro(17, 90, 1, 70, 2, 100, 1, 15);
     moveForSec(40, true, 0.25);
     setintakespd(-100);
@@ -223,12 +225,13 @@ void auto_skills_118()
     setintakespd(100);
 
     pidmove(-13, 0.5, 1);
-    pros::delay(200);
+    pros::delay(300);
     setintakespd(-100);
+    pidTurnAbs(43.5, 1, 1);
     pidGyro(23, 43.5, 2, 70, 2.5, 100, 2, 15);
-    moveForSec(25, true, 0.3);
+    moveForSec(25, true, 0.27);
     setarmtarget(40);
-    moveForSec(40, true, 0.31);
+    moveForSec(40, true, 0.3);
 
     setintakespd(-100);
     
@@ -246,14 +249,15 @@ void auto_skills_118()
 
     pros::delay(400);
     setintakespd(-100);
-    pidGyro(22, 135, 2, 70, 2, 50, 1, 15);
-    moveForSec(25, true, 0.35);
+    pidTurnAbs(135, 1, 1);
+    pidGyro(21, 135, 2, 70, 2, 50, 1, 15);
+    moveForSec(25, true, 0.45);
     setarmtarget(40);
-    moveForSec(45, true, 0.4);
+    moveForSec(45, true, 0.41);
     setarmtarget(239);
     pros::delay(200);
     setintakespd(0);
-    pidGyro(22, 265, 1.1, 100, 2, 100, 1, 15);
+    pidGyro(24, 265, 1.1, 100, 2, 100, 1, 15);
     //moveForSec(80, true, 0.1);
     setarmtarget(00);
     moveForSec(30, true, 0.3);
@@ -268,8 +272,9 @@ void auto_skills_118()
     setarmtarget(0);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(10, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.1);
+    pidGyro(9, 180, 1, 60, 1, 40, 1);
+    moveForSec(20, true, 0.3);
+    setarmtarget(50);
 
     pidGyro(-13, 180, 1, 60, 1, 40, 1);
     setarmtarget(90);
@@ -294,14 +299,16 @@ void auto_skills_118()
     pros::delay(400);
     setintakespd(0);
     setarmtarget(0);
-    pidwallGyro(15, 273, 90, 1.1, 70, 0.5);
+    pidwallGyro(15.5, 273, 90, 1.1, 70, 0.5);
     setintakespd(0);
     setarmtarget(0);
     pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
     pidGyro(17.3, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.14);
+    moveForSec(35, true, 0.23);
+    pros::delay(300);
+    setarmtarget(50);
 
     
     pidGyro(-60, -182, 2, 90, 2, 100, 1, 15);
@@ -325,9 +332,11 @@ void auto_skills_118()
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    pidmove(-14, 1, 1);
+    pidmove(-15, 1, 1);
     setintakespd(-100);
 
+    pros::delay(400);
+    pidTurnAbs(277, 1, 1);
     pidGyro(31.5, 277, 1.1, 70, 2, 100, 1, 15);
     moveForSec(25, true, 0.35);
 
