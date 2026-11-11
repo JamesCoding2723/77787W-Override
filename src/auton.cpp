@@ -224,14 +224,14 @@ void auto_skills_118()
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    pidmove(-13, 0.5, 1);
+    pidmove(-14, 0.5, 1);
     pros::delay(300);
     setintakespd(-100);
     pidTurnAbs(43.5, 1, 1);
     pidGyro(23, 43.5, 2, 70, 2.5, 100, 2, 15);
     moveForSec(25, true, 0.27);
     setarmtarget(40);
-    moveForSec(40, true, 0.3);
+    moveForSec(40, true, 0.4);
 
     setintakespd(-100);
     
@@ -240,7 +240,7 @@ void auto_skills_118()
     
     pidGyro(21, 180, 1.1, 70, 2, 100, 1, 15);
     setintakespd(0);
-    moveForSec(30, true, 0.2);
+    moveForSec(30, true, 0.35);
 
 
     setarmtarget(0);
