@@ -474,22 +474,22 @@ void pidwallGyro(double targetInches, double targetHeading, float _wall, double 
 
 
     //drive PID
-    double kP_drive = 6.0;
+    double kP_drive = 7.3;
     double kI_drive = 0.0;
-    double kD_drive = 0.3;
+    double kD_drive = 0.2;
     double driveS_error;
 
     //turn PID
-    double kP_turn = 2;
-    double kI_turn = 0.1;
-    double kD_turn = 7.0;
+    double kP_turn = 3;
+    double kI_turn = 0.0;
+    double kD_turn = 6.0;
     double turnS_error;
 
     double driveError, drivePrevError;
     double turnError, turnPrevError;
 
-    double MIN_DRIVE = 12;   // NEW: tune this
-    double MIN_TURN  = 6;    // NEW: tune this (set to 0 to disable)
+    double MIN_DRIVE = 15;   // NEW: tune this
+    double MIN_TURN  = 8;    // NEW: tune this (set to 0 to disable)
 
 
     double settleTime = 0;

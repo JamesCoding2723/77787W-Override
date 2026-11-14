@@ -15,6 +15,8 @@ static const float ARM_MIN = 0;               // motor degrees, 0 = resting on b
 static const float ARM_MAX = 100000000;             // lift arm by hand and read the position
 static const int   DRIVER_MV = 12000;         // driver power (lower = slower arm)
 
+float armmax = 4500;
+
 // PID (same idea as a drive PID)
 static const float KP = 500.0;     // mV per degree of error
 static const float KI = 0.0;      // 0
@@ -92,7 +94,7 @@ void armtask()
 
             float out = KP * err + KI * integral + KD * derivative;
             if (out > 13000) out = 13000;
-            if (out < -4500) out = -4500;
+            if (out < -armmax) out = -armmax;
             armvolt((int)out);
 
             armSettled = (fabs(err) < DONE_TOL && fabs(derivative) < 1.0);

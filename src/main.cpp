@@ -97,10 +97,6 @@ void autonomous()
 
     auto_skills_118();
 
-    //setarmtarget(90);
-
-    //pros::delay(2000);
-
     //front_right_5pin();
 
     //right_twostack_4pin();  //Secretly a 5 pin

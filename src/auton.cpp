@@ -38,7 +38,7 @@ void right_goal_loader_close(int _arm_deg){
     //pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(9, 180, 1, 60, 1, 40, 1);
+    pidGyro(9.5, 180, 0.7, 60, 1, 40, 1);
     moveForSec(35, true, 0.1);
     setarmtarget(50);
     pros::delay(100);
@@ -46,12 +46,12 @@ void right_goal_loader_close(int _arm_deg){
     pidGyro(-10, 180, 1, 80, 1, 40, 1);
     setarmtarget(_arm_deg);
     pidTurnAbs(270, 10, 1);
-    pidGyro(23.3, 270, 1.3, 80, 2, 100, 1, 15);
-    moveForSec(30, true, 0.3);
+    pidGyro(26.4, 270, 1.3, 80, 2, 100, 1, 15);
+    moveForSec(40, true, 0.1);
     setintakespd(0);
     setarmtarget(0);
-    moveForSec(70, true, 0.2);
-    setintakespd(100);
+    moveForSec(30, true, 0.2);
+    setintakespd(70);
     moveForSec(40, false, 0.1);
     setintakespd(0);
 }
@@ -61,26 +61,27 @@ void right_goal_loader_far(int _arm_deg, double dis){
     pros::delay(400);
     setintakespd(0);
     setarmtarget(0);
-    pidwallGyro(16, 273, 90, 1.5, 70, 1);
+    pidwallGyro(16, 273, 90, 0.8, 70, 1);
     setintakespd(0);
     setarmtarget(0);
     //pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
     pidGyro(dis, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.14);
+    moveForSec(35, true, 0.09);
     
     setarmtarget(10);
     moveForSec(-30, true, 0.1);
     setarmtarget(30);
     pidGyro(-13, 180, 1, 80, 1, 40, 1);
     setarmtarget(_arm_deg);
-    pidGyro(19, -29, 1.5, 80, 1, 40, 1);
-    moveForSec(40, true, 0.25);
+    pidGyro(16.5, -29, 1.5, 80, 1, 40, 1);
+    moveForSec(40, true, 0.1);
     setintakespd(0);
     setarmtarget(0);
-    moveForSec(70, true, 0.2);
+    moveForSec(70, true, 0.18);
     setintakespd(70);
+    moveForSec(70, true, 0.2);
     moveForSec(40, false, 0.1);
     setintakespd(0);
 }
@@ -209,14 +210,14 @@ void auto_skills_118()
     imu.set_heading(180);
     jeminmecht();
     setarmtarget(50);
-    moveForSec(-70, true, 0.12);
-    moveForSec(70, true, 0.35);
-    moveForSec(-70, true, 0.2);
-    moveForSec(70, true, 0.35);
+    moveForSec(-60, true, 0.19);
+    moveForSec(75, true, 0.35);
+    moveForSec(-50, true, 0.2);
+    moveForSec(75, true, 0.35);
     //setintakespd(-50);
     pidmove(-15, 1, 3, 100, 1,100);
     setintakespd(0);
-    pros::delay(200);
+    pros::delay(100);
     turn(-60);
     pros::delay(50);
     setarmtarget(96);
@@ -224,15 +225,19 @@ void auto_skills_118()
     pidGyro(17, 90, 1, 70, 2, 100, 1, 15);
     moveForSec(40, true, 0.25);
     setintakespd(-100);
+    armmax = 2500;
     setarmtarget(0);
     moveForSec(70, true, 0.2);
-    moveForSec(40, false, 0.1);
-    setintakespd(100);
+    moveForSec(40, false, 0.05);
+    setintakespd(70);
+    moveForSec(40, false, 0.05);
+    setintakespd(70);
 
     pidmove(-14, 0.5, 1);
+    armmax = 4500;
     pros::delay(200);
     setintakespd(-100);
-    pidTurnAbs(43.5, 1, 1);
+    pidTurnAbs(43.5, 1, 0.8);
     pidGyro(23, 43.5, 2, 70, 2.5, 100, 2, 15);
     moveForSec(25, true, 0.27);
     setarmtarget(40);
@@ -254,9 +259,9 @@ void auto_skills_118()
 
     pros::delay(200);
     setintakespd(-100);
-    pidTurnAbs(134, 1, 1);
-    pidGyro(21, 134, 2, 70, 2, 50, 1, 15);
-    moveForSec(25, true, 0.25);
+    pidTurnAbs(134, 1, 0.8);
+    pidGyro(19, 134, 2, 70, 2, 50, 1, 15);
+    moveForSec(25, true, 0.5);
     setarmtarget(40);
     moveForSec(45, true, 0.46);
     setarmtarget(239);
@@ -264,98 +269,109 @@ void auto_skills_118()
     setintakespd(0);
     pidGyro(26, 265, 1.1, 100, 2, 100, 1, 15);
     moveForSec(30, true, 0.2);
+    armmax = 2500;
     setarmtarget(0);
-    moveForSec(30, true, 0.1);
+    moveForSec(30, true, 0.2);
+    setintakespd(100);
+    armmax = 4500;
 
     right_goal_loader_close(314);
 
     right_goal_loader_close(389);
 
     setintakespd(100);
-    pidwallGyro(16, 273, 90, 2, 70, 0.5);
+    pidwallGyro(16, 273, 90, 2, 70, 1);
     setintakespd(0);
     setarmtarget(0);
     pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(10.5, 180, 1, 60, 1, 40, 1);
-    moveForSec(25, true, 0.24);
+    pidGyro(9, 180, 0.78, 60, 1, 40, 1);
+    moveForSec(20, true, 0.4);
     setarmtarget(50);
 
     pidGyro(-13, 180, 1, 60, 1, 40, 1);
-    setarmtarget(96);
+    setarmtarget(103);
     pidGyro(16.5, -28, 1.5, 60, 1, 40, 1);
     moveForSec(40, true, 0.25);
     setintakespd(-100);
+    moveForSec(30, false, 0.11);
     setarmtarget(0);
-    moveForSec(70, true, 0.2);
+    pros::delay(200);
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    right_goal_loader_far(164, 16);
+    right_goal_loader_far(164, 15.3);
 
-    right_goal_loader_far(239, 16.5);
+    right_goal_loader_far(239, 15.7);
 
-    right_goal_loader_far(314, 17);
+    right_goal_loader_far(310, 16.1);
 
-    //right_goal_loader_far(389);
+    //
 
-
-    moverightleft(-40, -50);
+    moverightleft(-50, -60);
     pros::delay(400);
     setintakespd(0);
     setarmtarget(0);
-    pidwallGyro(15.5, 273, 90, 1.1, 70, 0.5);
+    pidwallGyro(15.5, 273, 90, 1.1, 70, 1);
     setintakespd(0);
     setarmtarget(0);
     pros::delay(100);
     pidTurnAbs(180, 10, 1);
     setintakespd(-100);
-    pidGyro(18.3, 180, 1, 60, 1, 40, 1);
-    moveForSec(35, true, 0.33);
-    pros::delay(300);
+    pidGyro(15, 180, 1, 60, 1, 40, 1);
+    moveForSec(25, true, 0.35);
+    pros::delay(300); //
     setarmtarget(50);
 
     
-    pidGyro(-60, -182, 2, 90, 2, 100, 1, 15);
+    pidGyro(-60, 183.5, 2, 90, 2, 100, 1, 15);
     pidTurnAbs(90, 10, 0.8);
-    moveForSec(60, true, 0.3);
+    moveForSec(75, true, 0.3);
     moveForSec(50, false, 0.2);
-    moveForSec(60, true, 0.3);
+    moveForSec(75, true, 0.3);
 
+    setintakespd(0);
     moveForSec(-30, true, 0.35);
 
     pidTurnAbs(130, 10, 0.8);
-    setarmtarget(165);
-    pidGyro(-40, 90, 2, 70, 2, 100, 1, 1000000);
+    setarmtarget(175);
+    pidGyro(-44, 90, 2, 70, 2, 100, 1, 1000000);
 
     pidGyro(15, 225, 1.1, 70, 2, 100, 1, 15);
-    setintakespd(-100);
+    //setintakespd(-100);
     moveForSec(40, true, 0.25);
     setintakespd(-50);
-    setarmtarget(0);
-    moveForSec(70, true, 0.2);
+    //moveForSec(30, false, 0.1)
+    armmax = 1500; 
+    setarmtarget(105);
+    pros::delay(350);
+    setintakespd(100);
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
-    pidmove(-10, 0.5, 1);
+    pidmove(-6, 0.5, 1);
+    armmax = 4500;
+    setarmtarget(0);
     setintakespd(-100);
 
     pros::delay(100);
-    pidTurnAbs(270, 1, 1);
-    pidGyro(27.5, 270, 1, 80, 2, 100, 1, 15);
-    pidGyro(12, 315, 1.1, 70, 2, 100, 1, 15);
-    moveForSec(35, true, 0.2);
+    pidTurnAbs(270, 1, 0.8);
+    pidGyro(24.2, 270, 1.3, 80, 2, 100, 1, 7);
+    pros::delay(100);
+    pidGyro(9, 313, 1.1, 70, 2, 100, 1, 15);
+    moveForSec(35, true, 0.3);
 
-    setarmtarget(240);
+    setarmtarget(250);
     pros::delay(100);
 
-    pidGyro(28, 145, 1.1, 100, 2, 100, 1, 15);
-    moveForSec(40, true, 0.2);
-    setarmtarget(00);
-    moveForSec(40, true, 0.3);
+    //pidGyro(31, 145, 1.1, 100, 2, 100, 1, 15, 1.6);
+    pidTurnAbs(143, 1, 0.75);
+    moveForSec(90, true, 0.8);
+    setarmtarget(100);
+    moveForSec(40, true, 0.4);
 
-    pidmove(-8, 1, 1);
+    //pidmove(-8, 1, 1);
 
 
 
@@ -409,35 +425,38 @@ void right_twostack_4pin() //ATTEMPTS A 5 PIN
 {
     imu.set_heading(270);
     jeminmecht();
-    setarmtarget(100);
+    setarmtarget(106);
     pidGyro(17, 325, 1, 100, 2, 25, 1, 100000);
-    moveForSec(40, true, 0.2);
-    setintakespd(-100);
-    moveForSec(30, false, 0.1);
+    moveForSec(40, true, 0.25);
+    //setintakespd(-100);
+    moveForSec(30, false, 0.11);
     setarmtarget(0);
-    moveForSec(70, true, 0.2);
+    pros::delay(200);
     moveForSec(40, false, 0.1);
     setintakespd(100);
 
 
-    pidGyro(-9, 225, 1.4, 70, 2, 100, 1, 100000, 1, 5);
+    pidGyro(-9, 225, 1.4, 55, 2, 100, 1, 100000, 1, 4.5);
     setintakespd(-100);
     pros::delay(200);
-    pidmove(8, 1, 1);
-    moveForSec(20, true, 0.13);
+    pidmove(6, 1, 1);
+    setarmtarget(50);
+    moveForSec(30, true, 0.33);
     setarmtarget(164);
     pidGyro(22, -15, 1.3, 70, 2, 25, 1, 15, 1);
     //pros::delay(200);
     setintakespd(0);
-    moveForSec(30, true, 0.1);
+    moveForSec(30, true, 0.24);
     setarmtarget(0);
     moveForSec(35, true, 0.2);
 
-    pidmove(-13, 1, 1);
-    //pros::delay(200);
+    pidGyro(-14, 0, 1.3, 80, 2, 100, 1, 10);
+    pros::delay(200);
     setintakespd(-100);
-    pidGyro(21, -48, 1.3, 70, 1, 100, 1, 15);
-    moveForSec(35, true, 0.25);
+    pidTurnAbs(-46, 1, 0.8);
+    pidGyro(23, -46, 1.3, 70, 1, 100, 1, 15);
+    setarmtarget(50);
+    moveForSec(35, true, 0.35);
     setintakespd(-20);
     setarmtarget(239);
     pidGyro(48, 15, 2, 90, 2, 100, 1);
@@ -468,7 +487,7 @@ void right_twostack_4pin() //ATTEMPTS A 5 PIN
     moveForSec(-30, true, 0.3);
     pros::delay(150);
     moveForSec(80, true, 0.25);
-    moveForSec(-30, true, 0.35);
+    moveForSec(-30, true, 0.3);
     pros::delay(100);
 
 

@@ -9,6 +9,8 @@ extern pros::Motor arm_motorL;
 extern pros::Motor arm_motorR;
 extern pros::ADIDigitalIn arm_limit;
 
+extern float armmax;
+
 void arminit();                      // call once in initialize()
 void armtask();                      // the PID task (start it in initialize())
 void armdriver(bool up, bool down);  // call every opcontrol loop (turns PID off)
